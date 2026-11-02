@@ -191,7 +191,7 @@ footer{color:var(--muted);font-size:.82rem;margin-top:36px;padding-top:14px;bord
     </div>
     <div class="toolbar">
       <button class="primary" id="pdf" data-i="pdf"></button>
-      <button id="dil">EN</button>
+      <div class="seg-btn" id="dil"><button data-dil="tr">TR</button><button data-dil="en">EN</button><button data-dil="fi">FI</button></div>
       <button id="sifirla" data-i="sifirla"></button>
     </div>
   </header>
@@ -998,12 +998,12 @@ function raporOlustur() {
 function metinler() {
   document.documentElement.lang = dil;
   document.querySelectorAll("[data-i]").forEach(e => { e.textContent = t(e.dataset.i); });
-  document.getElementById("dil").textContent = { tr: "EN", en: "FI", fi: "TR" }[dil];
+  document.querySelectorAll("#dil button").forEach(b => b.classList.toggle("on", b.dataset.dil === dil));
   document.getElementById("eksik").innerHTML = `<ul>${t("eksik").map(x => `<li>${x}</li>`).join("")}</ul>`;
 }
 function hepsi() { metinler(); kazanKartlari(); odakListesi(); parametreler(); document.getElementById("detay").innerHTML = ""; document.getElementById("detay2").innerHTML = ""; secili = null; guncelle(); }
 
-document.getElementById("dil").addEventListener("click", () => { dil = { tr: "en", en: "fi", fi: "tr" }[dil]; hepsi(); });
+document.querySelectorAll("#dil button").forEach(b => b.addEventListener("click", () => { dil = b.dataset.dil; hepsi(); }));
 document.getElementById("pdf").addEventListener("click", () => {
   raporOlustur();
   const eski = document.title;
