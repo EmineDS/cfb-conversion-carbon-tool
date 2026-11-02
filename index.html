@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>CFB Conversion Carbon Tool</title>
+<style>
+:root{
+  --bg:#f6f5f1;--card:#ffffff;--ink:#1d1f22;--muted:#5d636b;--line:#e3e0d8;--soft:#efede7;
+  --accent:#1f6f5c;--accent-soft:#e2f0ea;--warn:#8f5400;--warn-soft:#fbefd9;--bad:#b3261e;--bad-soft:#fbe5e3;
+  --blue-soft:#e6eef8;--blue:#245a9a;--grid:#ebe8e1;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161719;--card:#1f2124;--ink:#ecebe7;--muted:#a6abb2;--line:#34373c;--soft:#2a2d31;
+  --accent:#6fc7ad;--accent-soft:#1d3a33;--warn:#f0b65c;--warn-soft:#3a2f1c;--bad:#f2948d;--bad-soft:#3b2220;
+  --blue-soft:#1e2a3a;--blue:#8db6ee;--grid:#2c2f33;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;
+}}
+:root[data-theme="dark"]{
+  --bg:#161719;--card:#1f2124;--ink:#ecebe7;--muted:#a6abb2;--line:#34373c;--soft:#2a2d31;
+  --accent:#6fc7ad;--accent-soft:#1d3a33;--warn:#f0b65c;--warn-soft:#3a2f1c;--bad:#f2948d;--bad-soft:#3b2220;
+  --blue-soft:#1e2a3a;--blue:#8db6ee;--grid:#2c2f33;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:20px 16px 64px}
+header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.brand{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{background:#fff;border-radius:10px;padding:8px 12px;display:flex;align-items:center;border:1px solid var(--line)}
+.logo img{height:34px;display:block}
+.by{font-size:.86rem;color:var(--muted);line-height:1.35}
+.by b{color:var(--ink);font-size:1rem}
+h1{font-size:1.6rem;line-height:1.2;margin:18px 0 0}
+.sub{color:var(--muted);margin:6px 0 0;max-width:820px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--muted)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.seg-btn{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg-btn button{border:none;border-radius:0;padding:5px 11px;background:var(--card)}
+.seg-btn button.on{background:var(--ink);color:var(--card)}
+h2{font-size:1.15rem;margin:34px 0 4px}
+.h2sub{color:var(--muted);font-size:.9rem;margin:0 0 12px;max-width:820px}
+h3{font-size:.98rem;margin:0 0 4px}
+.csub{color:var(--muted);font-size:.84rem;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.grid{display:grid;gap:12px}
+.boilers{grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.boiler .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 0}
+.boiler .row label{color:var(--muted);font-size:.88rem}
+.boiler input[type=text]{font:inherit;font-weight:600;border:none;border-bottom:1px dashed var(--line);background:transparent;color:var(--ink);width:100%;padding:2px 0}
+.boiler .dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+input[type=number]{font:inherit;width:96px;padding:4px 6px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);text-align:right}
+input[type=range]{width:100%;accent-color:var(--accent)}
+select{font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink)}
+.ref{font-size:.72rem;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:1px 7px;border-radius:99px;white-space:nowrap}
+.x{border:none;background:none;color:var(--muted);font-size:1.1rem;padding:0 4px}
+.heroes{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.hero .big{font-size:2.1rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.hero .unit{color:var(--muted);font-size:.84rem}
+.hero .line{display:flex;justify-content:space-between;gap:8px;font-size:.88rem;margin-top:6px;font-variant-numeric:tabular-nums}
+.hero .line span:first-child{color:var(--muted)}
+.hero .top3{margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.delta{display:inline-block;margin-top:8px;font-weight:700;font-size:.95rem;padding:2px 9px;border-radius:99px;background:var(--accent-soft);color:var(--accent)}
+.delta.up{background:var(--bad-soft);color:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--muted);margin:4px 0 10px}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend .ln{display:inline-block;width:16px;height:2px;margin-right:6px;vertical-align:3px}
+.barrow{display:grid;grid-template-columns:minmax(100px,180px) 1fr;gap:10px;align-items:center;margin:10px 0}
+.barrow .name{font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.track{position:relative;height:30px}
+.track.thin{height:22px}
+.seg{position:absolute;top:0;height:100%;border-right:2px solid var(--card);cursor:pointer;transition:filter .15s}
+.seg:hover,.seg.sel{filter:brightness(1.12) saturate(1.1)}
+.seg.sel{outline:2px solid var(--ink);outline-offset:1px;z-index:2}
+.seg.first{border-radius:4px 0 0 4px}
+.seg.last{border-radius:0 4px 4px 0;border-right:none}
+.seg.only{border-radius:4px;border-right:none}
+.tot{position:absolute;top:50%;transform:translateY(-50%);font-size:.84rem;font-weight:600;white-space:nowrap;padding-left:8px;font-variant-numeric:tabular-nums}
+.axis{display:grid;grid-template-columns:minmax(100px,180px) 1fr;gap:10px;font-size:.76rem;color:var(--muted)}
+.axis .ticks{position:relative;height:18px;border-top:1px solid var(--line)}
+.axis .ticks span{position:absolute;transform:translateX(-50%);top:2px}
+.hint{font-size:.8rem;color:var(--muted);margin-top:8px}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--card);font-size:.82rem;padding:6px 9px;border-radius:8px;z-index:10;display:none;max-width:280px;line-height:1.35}
+.panel{border:1px solid var(--line);border-left:4px solid var(--c,var(--accent));background:var(--card);border-radius:12px;padding:14px 16px;margin-top:12px}
+.panel h4{margin:0 0 2px;font-size:1rem}
+.panel .meta{color:var(--muted);font-size:.84rem;margin-bottom:10px}
+.item{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:none}
+.item .v{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.item .d{grid-column:1/-1;font-size:.86rem;color:var(--muted)}
+.item .d b{color:var(--ink);font-weight:600}
+.item .mini{grid-column:1/-1;height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+.item .mini span{display:block;height:100%;border-radius:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.chip{font-size:.78rem;padding:2px 9px;border-radius:99px;background:var(--soft);color:var(--muted)}
+.pareto .row{display:grid;grid-template-columns:minmax(120px,200px) 1fr 70px;gap:10px;align-items:center;margin:5px 0;cursor:pointer}
+.pareto .row:hover .nm{text-decoration:underline}
+.pareto .nm{font-size:.86rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pareto .bar{height:16px;border-radius:0 4px 4px 0}
+.pareto .pc{font-size:.82rem;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.fall .row{display:grid;grid-template-columns:minmax(120px,200px) 1fr 70px;gap:10px;align-items:center;margin:3px 0}
+.fall .trk{position:relative;height:18px}
+.fall .b{position:absolute;top:0;height:100%;border-radius:3px}
+.fall .zero{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.fall .vv{font-size:.82rem;text-align:right;font-variant-numeric:tabular-nums}
+.fall .row.endrow .nm{font-weight:700}
+svg text{fill:var(--muted);font-size:11px;font-family:inherit}
+svg .gl{stroke:var(--grid);stroke-width:1}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+th{background:var(--soft);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr.sum td{font-weight:700}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--soft)}
+.t{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:99px;white-space:nowrap}
+.t-sabit{background:var(--soft);color:var(--muted)}
+.t-girdi{background:var(--blue-soft);color:var(--blue)}
+.t-secenek{background:var(--accent-soft);color:var(--accent)}
+.t-kaydirici{background:#efe7fb;color:#5b3fb0}
+:root[data-theme="dark"] .t-kaydirici{background:#2a2340;color:#b9a8f2}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .t-kaydirici{background:#2a2340;color:#b9a8f2}}
+.t-turetilmis{background:var(--warn-soft);color:var(--warn)}
+.onay{display:inline-block;font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:99px;background:var(--bad-soft);color:var(--bad);white-space:nowrap}
+details.grp{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:10px 0}
+details.grp summary{cursor:pointer;padding:12px 16px;font-weight:600}
+details.grp .wrap{border:none;border-top:1px solid var(--line);border-radius:0 0 12px 12px}
+.ptable{min-width:760px}
+.ptable td:nth-child(2){width:150px;white-space:nowrap}
+.ptable .src{color:var(--muted);font-size:.8rem;min-width:220px}
+.ptable input[type=range]{width:120px;vertical-align:middle}
+.rv{font-variant-numeric:tabular-nums;font-weight:600;margin-left:6px}
+.ok{color:var(--accent);font-weight:700}
+.warnc{color:var(--warn);font-weight:700}
+.note{background:var(--warn-soft);border-radius:12px;padding:12px 16px;font-size:.9rem}
+.note ul{margin:6px 0 0;padding-left:20px}
+.types{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:.84rem;color:var(--muted);align-items:center}
+.cols2{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.focusbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px;font-size:.9rem}
+.steam{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin-bottom:12px}
+.steam input[type=range]{width:min(420px,100%)}
+.steam .rv{font-size:1.1rem}
+.save{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.save .big{font-size:1.7rem;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.save .lbl{color:var(--muted);font-size:.84rem}
+.good{color:var(--accent)}
+.badv{color:var(--bad)}
+footer{color:var(--muted);font-size:.82rem;margin-top:36px;padding-top:14px;border-top:1px solid var(--line)}
+#rapor{display:none}
+@media print{
+  :root,:root[data-theme="dark"]{--bg:#fff;--card:#fff;--ink:#1d1f22;--muted:#555b63;--line:#dcd9d1;--soft:#f1efea;--accent:#1f6f5c;--accent-soft:#e2f0ea;--warn:#8f5400;--warn-soft:#fbefd9;--bad:#b3261e;--bad-soft:#fbe5e3;--grid:#e6e3dc;
+    --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#6250d6;--s8:#e34948}
+  @page{size:A4;margin:14mm 13mm}
+  body{background:#fff;font-size:10.5pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  main,.tip{display:none!important}
+  #rapor{display:block}
+  #rapor h1{font-size:18pt;margin:10px 0 2px}
+  #rapor h2{font-size:12.5pt;margin:16px 0 6px;break-after:avoid}
+  #rapor .blok{break-inside:avoid;margin-bottom:8px}
+  #rapor .card{border:1px solid var(--line);padding:10px 12px;border-radius:8px}
+  #rapor table{font-size:8.6pt}
+  #rapor th,#rapor td{padding:4px 6px}
+  #rapor .wrap{overflow:visible;border-radius:6px}
+  #rapor .ptable{min-width:0}
+  #rapor .heroes{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  #rapor .hero .big{font-size:18pt}
+  #rapor .save{grid-template-columns:repeat(4,1fr)}
+  #rapor .save .big{font-size:13pt}
+  #rapor .cols2{grid-template-columns:1fr 1fr}
+  #rapor .kapak{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:8px}
+  #rapor .kapak img{height:30px}
+  #rapor .meta2{color:var(--muted);font-size:9pt}
+  #rapor .sayfa{break-before:page}
+  #rapor .x{display:none}
+}
+@media (max-width:560px){h1{font-size:1.3rem}.hero .big{font-size:1.7rem}.barrow,.axis{grid-template-columns:86px 1fr}
+  .pareto .row,.fall .row{grid-template-columns:100px 1fr 56px}.cols2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="brand">
+      <div class="by"><span data-i="hazirlayan"></span><br><b>Emine Edis</b></div>
+    </div>
+    <div class="toolbar">
+      <button class="primary" id="pdf" data-i="pdf"></button>
+      <button id="dil">EN</button>
+      <button id="sifirla" data-i="sifirla"></button>
+    </div>
+  </header>
+  <h1 data-i="baslik"></h1>
+  <p class="sub" data-i="altbaslik"></p>
+
+  <h2 data-i="h_kazanlar"></h2>
+  <div class="grid boilers" id="kazanlar"></div>
+  <p style="margin:10px 0 0"><button class="primary" id="ekle" data-i="ekle"></button></p>
+
+  <h2 data-i="h_sonuc"></h2>
+  <div class="grid heroes" id="heroes"></div>
+
+  <h2 data-i="h_nereden"></h2>
+  <p class="h2sub" data-i="s_nereden"></p>
+  <div class="card">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center">
+      <h3 data-i="h_ayakizi"></h3>
+      <div class="seg-btn" id="gorunum"><button data-v="kaynak"></button><button data-v="asama"></button></div>
+    </div>
+    <div class="legend" id="lg-karbon"></div>
+    <div id="ch-karbon"></div>
+    <p class="hint" data-i="ipucu"></p>
+    <div id="detay"></div>
+  </div>
+
+  <div class="focusbar" style="margin-top:22px"><span data-i="odak"></span><select id="odak"></select></div>
+  <div class="grid cols2">
+    <div class="card">
+      <h3 data-i="h_pareto"></h3>
+      <p class="csub" data-i="s_pareto"></p>
+      <div class="pareto" id="ch-pareto"></div>
+    </div>
+    <div class="card">
+      <h3 id="h-kopru"></h3>
+      <p class="csub" data-i="s_kopru"></p>
+      <div class="fall" id="ch-kopru"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <h3 data-i="h_tornado"></h3>
+    <p class="csub" data-i="s_tornado"></p>
+    <div class="legend" id="lg-tornado"></div>
+    <div class="fall" id="ch-tornado"></div>
+  </div>
+
+  <h2 data-i="h_para"></h2>
+  <p class="h2sub" data-i="s_para"></p>
+  <div class="card">
+    <div class="steam">
+      <label for="buhar" data-i="buharsec"></label>
+      <input type="range" id="buhar" min="100" max="2000" step="5">
+      <span><span class="rv" id="buhar-v"></span> GWh/a</span>
+      <span class="csub" style="margin:0" id="buhar-not"></span>
+    </div>
+    <div class="grid save" id="tasarruf"></div>
+    <div class="grid cols2" style="margin-top:14px">
+      <div>
+        <h3 data-i="h_yilmaliyet"></h3>
+        <div class="legend" id="lg-yil"></div>
+        <div id="ch-yil"></div>
+      </div>
+      <div>
+        <h3 data-i="h_yilkarbon"></h3>
+        <div class="legend" id="lg-yilk"></div>
+        <div id="ch-yilk"></div>
+      </div>
+    </div>
+  </div>
+  <div class="grid cols2" style="margin-top:12px">
+    <div class="card">
+      <h3 data-i="h_maliyet"></h3>
+      <div class="legend" id="lg-maliyet"></div>
+      <div id="ch-maliyet"></div>
+    </div>
+    <div class="card">
+      <h3 data-i="h_ets"></h3>
+      <p class="csub" id="ets-not"></p>
+      <div class="legend" id="lg-ets"></div>
+      <div id="ch-ets"></div>
+    </div>
+  </div>
+
+  <h2 data-i="h_yillik"></h2>
+  <div class="wrap"><table id="yillik"></table></div>
+
+  <h2 data-i="h_kalemler"></h2>
+  <p class="h2sub" data-i="s_kalemler"></p>
+  <div class="wrap"><table id="kalemler"></table></div>
+  <div id="detay2"></div>
+
+  <h2 data-i="h_kontrol"></h2>
+  <div class="wrap"><table id="kontrol"></table></div>
+
+  <h2 data-i="h_param"></h2>
+  <div class="types" id="turler"></div>
+  <div id="params"></div>
+
+  <h2 data-i="h_eksik"></h2>
+  <div class="note" id="eksik"></div>
+
+  <footer><span data-i="dipnot"></span></footer>
+</main>
+<div class="tip" id="tip"></div>
+<section id="rapor"></section>
+
+<script src="model.js"></script>
+<script>
+"use strict";
+const { VARSAYILAN, KAZANLAR, ULKELER, hesapla } = Model;
+
+// ---------------------------------------------------------------- metinler
+const T = {
+  tr: {
+    hazirlayan: "Sumitomo SHI FW staj görüşmesi için hazırlayan",
+    pdf: "PDF rapor indir", r_baslik: "Dönüşüm karbon ve maliyet raporu", r_tarih: "Rapor tarihi", r_kapsam: "1. Amaç ve kapsam",
+    r_kapsam_m: "Bu rapor, aynı CFB kazanının farklı yakıt karışımlarıyla çalıştırılmasının karbon ayak izini ve işletme maliyetini karşılaştırır. Yöntem ISO 14040/14044 yaşam döngüsü değerlendirmesine dayanır. Fonksiyonel birim buhara verilen 1 MWh ısıdır. Sistem sınırı beşikten kazanın buhar çıkışına uzanır: kömür madeni ve orman dahil, türbin ve inşaat hariç. Sera gazları IPCC AR6 GWP100 katsayılarıyla CO₂e'ye çevrilir. Biyojenik CO₂ ayrı satırda raporlanır.",
+    r_kazan: "2. Karşılaştırılan kazanlar", r_sonuc: "3. Sonuç", r_nereden: "4. Emisyonların kaynağı", r_odak: "5. İncelenen kazan", r_para: "6. Maliyet", r_kalem: "7. Bütün emisyon kalemleri",
+    r_varsayim: "8. Varsayımlar ve kaynaklar", r_kontrol: "9. Kontroller", r_sinir: "10. Sınırlamalar",
+    r_degisen: "varsayılandan değiştirildi", r_buhar: "Karşılaştırma için yıllık buhar",
+    baslik: "Kömürden biyokütleye dönüşüm: karbon ve maliyet aracı",
+    altbaslik: "Bir CFB kazanının karbon ayak izini (madenden ve ormandan buhar çıkışına) ve işletme maliyetini kazan kazan karşılaştırır. Fonksiyonel birim: buhara verilen 1 MWh ısı. Örnek vaka: Fortum Częstochowa, kamuya açık verilerle.",
+    sifirla: "Varsayılana dön", ekle: "+ Kazan ekle",
+    h_kazanlar: "Kazanlar", h_sonuc: "Sonuç",
+    h_nereden: "Emisyon nereden geliyor?",
+    s_nereden: "Her kazanın ayak izi kaynaklarına ayrılmış halde. Bir parçaya tıklayınca o emisyonun nerede oluştuğu, neden oluştuğu, nasıl hesaplandığı ve kaynağı açılır.",
+    h_ayakizi: "Karbon ayak izi, kg CO₂e / MWh buhar", kaynak_g: "Kaynağa göre", asama_g: "Yaşam döngüsü aşamasına göre",
+    ipucu: "İpucu: renkli bir parçaya tıkla.",
+    odak: "İncelenen kazan:",
+    h_pareto: "En büyük kaynaklar", s_pareto: "Kalemler büyükten küçüğe, sağda toplamın payı. Tıklayınca ayrıntı açılır.",
+    h_kopru: "Köprü", s_kopru: "Referanstan bu kazana giderken hangi kalem ne kadar değişiyor. Yeşil azalma, kırmızı artış.",
+    h_tornado: "Hangi varsayım sonucu en çok oynatıyor?", s_tornado: "Her varsayım kendi makul aralığının iki ucuna çekildi, diğerleri sabit tutuldu. En üstteki, sonucu en çok belirleyen varsayım.",
+    alt_uc: "aralığın düşük emisyon ucu", ust_uc: "aralığın yüksek emisyon ucu",
+    h_para: "Para: aynı buhar, farklı fatura",
+    s_para: "Yıllık buhar üretimini seç. Bütün kazanlar aynı miktarda buhar üretiyormuş gibi yıllık maliyet ve karbon karşılaştırılır.",
+    buharsec: "Yıllık buhar üretimi", buharnot: "Częstochowa dönüşüm sonrası ≈ 795 GWh",
+    h_yilmaliyet: "Yıllık işletme maliyeti, M€", h_yilkarbon: "Yıllık ayak izi, bin t CO₂e",
+    h_maliyet: "Birim işletme maliyeti, € / MWh buhar",
+    h_ets: "ETS fiyatı değişirse", ets_kesisim: "Bu kazan, ETS {x} €/t'nin üstünde referanstan ucuz.", ets_hep: "Bu kazan her ETS fiyatında referanstan ucuz.", ets_hic: "Bu kazan 0–200 €/t aralığında referanstan ucuz olmuyor.", ets_bugun: "bugün",
+    tas_yil: "yıllık maliyet farkı", tas_gun: "günlük maliyet farkı", tas_co2: "yıllık karbon farkı", tas_ets: "yıllık ETS faturası farkı", tas_yakit: "yıllık yakıt",
+    ucuz: "ucuz", pahali: "pahalı", az: "az", fazla: "fazla",
+    h_yillik: "Kazanların kendi yıllık değerleri", h_kalemler: "Bütün emisyon kalemleri, kg CO₂e / MWh buhar",
+    s_kalemler: "Bir satıra tıklayınca o kalemin açıklaması açılır.",
+    h_kontrol: "Kontroller", h_param: "Parametreler", h_eksik: "Kapsam notları",
+    ad: "Ad", komur: "Kömür payı (ısıl)", verim: "Kazan verimi", kap: "Buhara verilen ısı", saat: "Tam yük saati", kirec: "Kireçtaşı ile kükürt tutma",
+    referans: "referans", toplam: "Toplam", birim: "kg CO₂e / MWh buhar", fosilbaca: "Bacadan fosil CO₂", biyojenik: "Biyojenik CO₂ (ayrı raporlanır)",
+    maliyet: "İşletme maliyeti", azalma: "referansa göre", enbuyuk: "En büyük üç kaynak",
+    yilt: "Yıllık ayak izi", yilm: "Yıllık işletme maliyeti", buhar: "Yıllık buhar", komurt: "Yakılan kömür", yongat: "Satın alınan yonga",
+    g: { baca: "Bacada fosil CO₂", n2o: "Kazanda N₂O ve CH₄", maden: "Maden metanı", madencilik: "Madencilik ve tren", yonga: "Yonga hasadı, taşıma, kayıp", sarf: "Elektrik, sarf, ilk yakma" },
+    a: { cikarma: "Yakıtın çıkarılması", tasima: "Taşıma", depo: "Depolama kaybı", kazan: "Kazan (yanma)", girdi: "İşletme girdileri" },
+    c: { yakit: "Yakıt", kayip: "Depoda kaybolan yonga", ets: "AB ETS", elektrik: "Yardımcı elektrik", sarf: "Kireçtaşı, amonyak, kum, yağ" },
+    nerede: "Nerede", neden: "Neden", formul: "Hesap", kaynak: "Kaynak", asama: "Aşama", payi: "toplamın payı",
+    k_kutle: "Kütle dengesi: giren − çıkan, kg", k_o2: "Kuru baca gazında O₂, %", k_lam: "Hava fazlalığı λ", k_so2: "Bacada SO₂, mg/Nm³ (%6 O₂)", k_so2not: "Sumitomo garantisi 30; odun külünün kalsiyumu sayılmadı",
+    kalem: "Kalem", tur: "Tür", deger: "Değer", birimk: "Birim",
+    turler: { sabit: "sabit", girdi: "varsayılanlı girdi", secenek: "seçenek", kaydirici: "kaydırıcı", turetilmis: "türetilmiş" },
+    onay: "onay bekliyor", sil: "Kazanı sil", yeni: "Yeni kazan", kapat: "Kapat",
+    eksik: ["Atıklar için kesme (cut-off) yöntemi: kül ve atık kum sistemden çıktığı an bizim sınırımızın dışındadır; geri kullanım kredisi verilmez, böylece hiçbir tasarruf iki kez sayılmaz.", "Kum ve kireçtaşı taşıması bir seçenektir (Parametreler, G); varsayılan kapalı, açılınca araç ve mesafe seçilir.", "Kapasite her kazan için ayrı girildiği için dönüşümle gelen kapasite değişimi kazan kartlarında görünür.", "Maliyette henüz yok: kömür nakliyesi, kül bertaraf bedeli ve bakım. Sarf fiyatları teslim ve vergisiz, 2023–2026 Polonya ihale ve resmi verileri."],
+    dipnot: "Hazırlayan: Emine Edis · Bütün varsayılan değerler hesaplama belgesindeki (05_hesaplama_dokumani, sürüm 2) kaynaklardan gelir ve aynı sayıları verir. Sumitomo SHI FW'nin resmi bir aracı değildir; kamuya açık verilerle hazırlanmış bağımsız bir çalışmadır. Taslak · Kasım 2026",
+    n2omod: "Kömür N₂O faktörü nasıl belirlensin", sicaklik: "yatak sıcaklığından", elle: "elle", sertifika: "Biyokütle sürdürülebilirlik kriterini karşılıyor (ETS'de sıfır)", evet: "evet", hayir: "hayır",
+    malztasima: "Kum ve kireçtaşı taşıması hesaba katılsın", kamyon: "kamyon", tren: "tren",
+  },
+  en: {
+    hazirlayan: "Prepared for the Sumitomo SHI FW internship interview by",
+    pdf: "Download PDF report", r_baslik: "Conversion carbon and cost report", r_tarih: "Report date", r_kapsam: "1. Goal and scope",
+    r_kapsam_m: "This report compares the carbon footprint and operating cost of running the same CFB boiler on different fuel mixes. The method follows ISO 14040/14044 life cycle assessment. The functional unit is 1 MWh of heat delivered to steam. The system boundary runs from cradle to the boiler steam outlet: coal mine and forest included, turbine and construction excluded. Greenhouse gases are converted to CO₂e with IPCC AR6 GWP100 factors. Biogenic CO₂ is reported on a separate line.",
+    r_kazan: "2. Boilers compared", r_sonuc: "3. Result", r_nereden: "4. Where the emissions come from", r_odak: "5. Boiler in focus", r_para: "6. Cost", r_kalem: "7. All emission items",
+    r_varsayim: "8. Assumptions and sources", r_kontrol: "9. Checks", r_sinir: "10. Limitations",
+    r_degisen: "changed from default", r_buhar: "Annual steam used for comparison",
+    baslik: "Coal-to-biomass conversion: carbon and cost tool",
+    altbaslik: "Compares the carbon footprint (from mine and forest to the steam outlet) and operating cost of CFB boilers side by side. Functional unit: 1 MWh of heat delivered to steam. Case: Fortum Częstochowa, with public data.",
+    sifirla: "Reset to defaults", ekle: "+ Add boiler",
+    h_kazanlar: "Boilers", h_sonuc: "Result",
+    h_nereden: "Where do the emissions come from?",
+    s_nereden: "Each boiler's footprint split by source. Click a segment to see where that emission happens, why, how it is calculated and its source.",
+    h_ayakizi: "Carbon footprint, kg CO₂e / MWh steam", kaynak_g: "By source", asama_g: "By life-cycle stage",
+    ipucu: "Tip: click a coloured segment.",
+    odak: "Boiler in focus:",
+    h_pareto: "Largest sources", s_pareto: "Items from largest to smallest, with their share of the total. Click for details.",
+    h_kopru: "Bridge", s_kopru: "How each item changes from the reference to this boiler. Green is a decrease, red an increase.",
+    h_tornado: "Which assumption moves the result most?", s_tornado: "Each assumption is pushed to both ends of its plausible range while the others stay fixed. The top one drives the result most.",
+    alt_uc: "low-emission end of range", ust_uc: "high-emission end of range",
+    h_para: "Money: same steam, different bill",
+    s_para: "Choose the annual steam output. All boilers are compared as if they produced the same amount of steam.",
+    buharsec: "Annual steam output", buharnot: "Częstochowa after conversion ≈ 795 GWh",
+    h_yilmaliyet: "Annual operating cost, M€", h_yilkarbon: "Annual footprint, kt CO₂e",
+    h_maliyet: "Unit operating cost, € / MWh steam",
+    h_ets: "If the ETS price changes", ets_kesisim: "This boiler is cheaper than the reference above an ETS price of {x} €/t.", ets_hep: "This boiler is cheaper than the reference at any ETS price.", ets_hic: "This boiler is not cheaper than the reference between 0 and 200 €/t.", ets_bugun: "today",
+    tas_yil: "annual cost difference", tas_gun: "daily cost difference", tas_co2: "annual carbon difference", tas_ets: "annual ETS bill difference", tas_yakit: "annual fuel",
+    ucuz: "cheaper", pahali: "more expensive", az: "less", fazla: "more",
+    h_yillik: "Each boiler's own annual values", h_kalemler: "All emission items, kg CO₂e / MWh steam",
+    s_kalemler: "Click a row to open the explanation of that item.",
+    h_kontrol: "Checks", h_param: "Parameters", h_eksik: "Scope notes",
+    ad: "Name", komur: "Coal share (thermal)", verim: "Boiler efficiency", kap: "Heat to steam", saat: "Full-load hours", kirec: "Sulphur capture with limestone",
+    referans: "reference", toplam: "Total", birim: "kg CO₂e / MWh steam", fosilbaca: "Fossil CO₂ at the stack", biyojenik: "Biogenic CO₂ (reported separately)",
+    maliyet: "Operating cost", azalma: "vs reference", enbuyuk: "Three largest sources",
+    yilt: "Annual footprint", yilm: "Annual operating cost", buhar: "Annual steam", komurt: "Coal burned", yongat: "Chips purchased",
+    g: { baca: "Fossil CO₂ at the stack", n2o: "N₂O and CH₄ in the boiler", maden: "Coal mine methane", madencilik: "Mining and rail", yonga: "Chip harvest, haul, losses", sarf: "Power, consumables, start-up" },
+    a: { cikarma: "Fuel extraction", tasima: "Transport", depo: "Storage losses", kazan: "Boiler (combustion)", girdi: "Operating inputs" },
+    c: { yakit: "Fuel", kayip: "Chips lost in storage", ets: "EU ETS", elektrik: "Auxiliary power", sarf: "Limestone, ammonia, sand, oil" },
+    nerede: "Where", neden: "Why", formul: "Calculation", kaynak: "Source", asama: "Stage", payi: "share of total",
+    k_kutle: "Mass balance: in − out, kg", k_o2: "O₂ in dry flue gas, %", k_lam: "Excess air λ", k_so2: "SO₂ at stack, mg/Nm³ (6% O₂)", k_so2not: "Sumitomo guarantee 30; calcium in wood ash not counted",
+    kalem: "Item", tur: "Type", deger: "Value", birimk: "Unit",
+    turler: { sabit: "constant", girdi: "input with default", secenek: "option", kaydirici: "slider", turetilmis: "derived" },
+    onay: "pending review", sil: "Remove boiler", yeni: "New boiler", kapat: "Close",
+    eksik: ["Cut-off approach for waste: ash and spent sand leave our boundary when they leave the boiler; no recycling credit is given, so no saving is counted twice.", "Sand and limestone haulage is an option (Parameters, G); off by default, with a choice of vehicle and distance when switched on.", "Capacity is entered per boiler, so the capacity change from the conversion shows in the boiler cards.", "Not yet in the cost: coal haulage, ash disposal fees and maintenance. Consumable prices are delivered and excl. taxes, from 2023–2026 Polish tenders and official data."],
+    dipnot: "Prepared by Emine Edis · All defaults come from the sources in the calculation report (05_hesaplama_dokumani, version 2) and reproduce its numbers. Not an official Sumitomo SHI FW tool; an independent study based on public data. Draft · November 2026",
+    n2omod: "How to set the coal N₂O factor", sicaklik: "from bed temperature", elle: "manual", sertifika: "Biomass meets sustainability criteria (zero under ETS)", evet: "yes", hayir: "no",
+    malztasima: "Include sand and limestone haulage", kamyon: "truck", tren: "rail",
+  },
+};
+
+// ---------------------------------------------------------------- her emisyon kaleminin açıklaması
+const KALEM = {
+  coal_co2: { asama: "kazan", tr: ["Kömürün yanma CO₂'si", "Kazanın bacası", "Kömürdeki fosil karbon yanınca CO₂ olur. Milyonlarca yıl yer altında kalmış karbon havaya eklenir.", "kömür enerjisi (GJ) × 93,89 kg CO₂/GJ"], en: ["Coal combustion CO₂", "Boiler stack", "Fossil carbon in coal turns into CO₂ when it burns, adding carbon stored underground for millions of years.", "coal energy (GJ) × 93.89 kg CO₂/GJ"], src: "KOBiZE 2026, Tablo 1" },
+  calc: { asama: "kazan", tr: ["Kireçtaşı kalsinasyonu", "Ocak, kükürt tutma", "Kükürdü tutmak için atılan kireçtaşı ısınınca parçalanır: CaCO₃ → CaO + CO₂. Bu CO₂ kayadan geldiği için fosil.", "CaCO₃ kütlesi × 44/100 (+ MgCO₃ payı)"], en: ["Limestone calcination", "Furnace, sulphur capture", "Limestone fed to capture sulphur breaks down when heated: CaCO₃ → CaO + CO₂. This CO₂ comes from rock, so it is fossil.", "CaCO₃ mass × 44/100 (+ MgCO₃ share)"], src: "Xu 2024, Tablo 1, s.20057" },
+  n2o: { asama: "kazan", tr: ["Kazanda N₂O", "Ocak, 850–900 °C", "Yakıttaki azot CFB'nin serin yatağında kısmen N₂O'ya döner. Sıcaklık arttıkça N₂O parçalanır, bu yüzden faktör yatak sıcaklığına bağlı.", "yakıt enerjisi × N₂O faktörü (kg/TJ) × 273"], en: ["Boiler N₂O", "Furnace, 850–900 °C", "Fuel nitrogen partly turns into N₂O in the cool CFB bed. N₂O breaks down as temperature rises, so the factor depends on bed temperature.", "fuel energy × N₂O factor (kg/TJ) × 273"], src: "Tsupari 2007, Tablo 6, Şekil 4; IPCC 2006 Cilt 2 Tablo 2.6" },
+  ch4: { asama: "kazan", tr: ["Kazanda CH₄", "Ocak", "Yanma bir an eksik kalınca az miktarda yanmamış metan kaçar.", "yakıt enerjisi × CH₄ faktörü × 29,8 (fosil) ya da 27,0 (biyojenik)"], en: ["Boiler CH₄", "Furnace", "When combustion is momentarily incomplete, a little unburnt methane escapes.", "fuel energy × CH₄ factor × 29.8 (fossil) or 27.0 (biogenic)"], src: "Tsupari 2007, Tablo 3 ve 6" },
+  mine_ch4: { asama: "cikarma", tr: ["Maden metanı", "Polonya taş kömürü madenleri", "Kömür damarında hapsolmuş metan, kazı sırasında havalandırma kuyularından atmosfere salınır. Bacada hiç görünmez.", "t kömür × 9,77 kg CH₄/t × 29,8"], en: ["Coal mine methane", "Polish hard coal mines", "Methane trapped in the coal seam is vented to the atmosphere during mining. It never shows up at the stack.", "t coal × 9.77 kg CH₄/t × 29.8"], src: "NID 2026, Tablo 3.3.1 ve 3.3.2" },
+  mining_co2: { asama: "cikarma", tr: ["Madencilik (metan dışı)", "Maden ve kömür hazırlama tesisi", "Madenin elektriği, yakıtları ve kömürün yıkanıp hazırlanması.", "kömür enerjisi (MJ) × 2,64 g CO₂e/MJ"], en: ["Mining (non-methane)", "Mine and coal preparation plant", "Electricity and fuels used at the mine, plus washing and preparing the coal.", "coal energy (MJ) × 2.64 g CO₂e/MJ"], src: "GUS 2025 Tabl. 3(29); Lewandowska 2025" },
+  train: { asama: "tasima", tr: ["Kömür treni", "Madenden santrale demiryolu", "Kömür trenle taşınır. Polonya demiryolu büyük ölçüde elektrikli.", "t kömür × km × 18,5 g/t·km"], en: ["Coal train", "Rail from mine to plant", "Coal travels by rail, largely electrified in Poland.", "t coal × km × 18.5 g/t·km"], src: "PKP Cargo 2022, s.49" },
+  harvest: { asama: "cikarma", tr: ["Hasat ve yongalama", "Orman", "Orman artıklarını toplayan makineler ve yongalayıcının dizeli.", "yonga enerjisi (MJ) × 1,6 g CO₂e/MJ"], en: ["Harvest and chipping", "Forest", "Diesel used by forwarders and the chipper.", "chip energy (MJ) × 1.6 g CO₂e/MJ"], src: "JRC 2017, Tablo 91" },
+  truck: { asama: "tasima", tr: ["Yonga kamyonu", "Ormandan santrale yol", "Nemli yonga kamyonla taşınır, boş dönüş dahil. Yonganın yarısı su olduğu için taşınan her ton daha az enerji taşır.", "t yonga × km × 0,040 L/t·km × dizel faktörü"], en: ["Chip truck", "Road from forest to plant", "Moist chips travel by truck, empty return included. Half of each tonne is water, so each tonne carries less energy.", "t chips × km × 0.040 L/t·km × diesel factor"], src: "Kühmaier 2022 Ek A.4; Gendek & Nurek 2016; JRC 2017 Tablo 6" },
+  dm_loss: { asama: "depo", tr: ["Kuru madde kaybının telafisi", "Yonga yığını", "Yığında mikroplar odunu yavaş yavaş yer. Aynı enerji için ormandan daha fazla yonga toplanıp taşınır.", "(hasat + kamyon) × kayıp / (1 − kayıp)"], en: ["Make-up for dry-matter loss", "Chip pile", "Microbes slowly consume wood in the pile, so more chips must be harvested and hauled for the same energy.", "(harvest + truck) × loss / (1 − loss)"], src: "Wihersaari 2005b, s.446" },
+  aux: { asama: "girdi", tr: ["Yardımcı elektrik", "Polonya elektrik şebekesi", "Fanlar, yakıt besleme ve kül sistemi şebekeden elektrik çeker. Polonya şebekesi kömür ağırlıklı.", "kWh × 0,641 kg CO₂e/kWh"], en: ["Auxiliary power", "Polish grid", "Fans, fuel feeding and the ash system draw grid power. The Polish grid is coal-heavy.", "kWh × 0.641 kg CO₂e/kWh"], src: "Lockwood 2013 Tablo 5; Lewandowska 2025 Tablo 15" },
+  nh3: { asama: "girdi", tr: ["Amonyak üretimi", "Amonyak fabrikası", "NOx'u temizleyen SNCR için kullanılan amonyak doğalgazdan üretilir.", "kg NH₃ × 2,4 kg CO₂/kg"], en: ["Ammonia production", "Ammonia plant", "Ammonia for NOx removal (SNCR) is made from natural gas.", "kg NH₃ × 2.4 kg CO₂/kg"], src: "Mahmoudi 2010; JRC amonyak notu 2026" },
+  sand_lime: { asama: "girdi", tr: ["Kum ve kireçtaşı üretimi", "Taş ocağı", "Yatak kumu ve kireçtaşı kazılıp kırılır.", "kg × 4,5 kg CO₂e/t"], en: ["Sand and limestone production", "Quarry", "Bed sand and limestone are quarried and crushed.", "kg × 4.5 kg CO₂e/t"], src: "Kırma taş EPD'leri; Leckner & Lind 2020" },
+  malz_tasima: { asama: "tasima", tr: ["Kum ve kireçtaşı taşıması", "Taş ocağından santrale", "Yatak kumu ve kireçtaşı tesise kamyonla ya da trenle getirilir. Seçenek: varsayılan kapalı.", "t × km × araç faktörü (kamyon 96,3 · tren 18,5 g/t·km)"], en: ["Sand and limestone haulage", "Quarry to plant", "Bed sand and limestone are brought to the plant by truck or rail. Option: off by default.", "t × km × vehicle factor (truck 96.3 · rail 18.5 g/t·km)"], src: "DESNZ 2026; PKP Cargo 2022 s.49" },
+  startup: { asama: "girdi", tr: ["İlk yakma yağı", "Kazan brülörleri", "Kazan durup yeniden kalkarken kumu ısıtmak için hafif yakıt yağı yakılır.", "yakıt enerjisinin %0,25–0,3'ü × yağ faktörü"], en: ["Start-up oil", "Boiler burners", "Light fuel oil heats the bed when the boiler restarts.", "0.25–0.3% of fuel energy × oil factor"], src: "Laanila, Johannes, Kauttua raporları; DESNZ 2026" },
+};
+const GRUP_KARBON = [
+  ["baca", ["coal_co2", "calc"], "--s1"],
+  ["n2o", ["n2o", "ch4"], "--s2"],
+  ["maden", ["mine_ch4"], "--s3"],
+  ["madencilik", ["mining_co2", "train"], "--s4"],
+  ["yonga", ["harvest", "truck", "dm_loss"], "--s5"],
+  ["sarf", ["aux", "nh3", "sand_lime", "malz_tasima", "startup"], "--s6"],
+];
+const ASAMALAR = [["cikarma", "--s1"], ["tasima", "--s2"], ["depo", "--s3"], ["kazan", "--s4"], ["girdi", "--s5"]];
+const GRUP_ASAMA = ASAMALAR.map(([a, c]) => [a, Object.keys(KALEM).filter(k => KALEM[k].asama === a), c]);
+const GRUP_MALIYET = [["yakit", ["komur", "yonga"], "--s1"], ["kayip", ["yonga_kayip"], "--s2"], ["ets", ["ets"], "--s3"], ["elektrik", ["elektrik"], "--s4"], ["sarf", ["sarf"], "--s5"]];
+const RENK_KALEM = {};
+GRUP_KARBON.forEach(([, ks, c]) => ks.forEach(k => { RENK_KALEM[k] = c; }));
+const KAZAN_RENK = ["--s1", "--s2", "--s3", "--s4", "--s5", "--s6", "--s7", "--s8"];
+
+// ---------------------------------------------------------------- duyarlılık aralıkları (hesap.py TOR listesi)
+const TOR = [
+  ["n2o", "Kömür N₂O faktörü", "Coal N₂O factor", p => { p.n2o_mod = "elle"; p.n2o_coal_elle = 30; }, p => { p.n2o_mod = "elle"; p.n2o_coal_elle = 61; }],
+  ["eta", "Kazan verimi", "Boiler efficiency", null, null],
+  ["mine_ch4", "Maden metanı", "Coal mine methane", p => { p.mine_ch4 = 8.1; }, p => { p.mine_ch4 = 11.8; }],
+  ["mining_co2", "Madencilik CO₂", "Mining CO₂", p => { p.mining_co2 = 1.96; }, p => { p.mining_co2 = 2.99; }],
+  ["train_km", "Tren mesafesi", "Rail distance", p => { p.train_km = 50; }, p => { p.train_km = 200; }],
+  ["grid", "Şebeke elektriği", "Grid electricity", p => { p.grid = 0.553; }, p => { p.grid = 0.70; }],
+  ["aux_coal", "Yardımcı elektrik, kömür", "Auxiliary power, coal", p => { p.aux_coal = 9; }, p => { p.aux_coal = 20; }],
+  ["aux_bio", "Yardımcı elektrik, biyokütle", "Auxiliary power, biomass", p => { p.aux_bio = 14; }, p => { p.aux_bio = 30; }],
+  ["truck_km", "Kamyon mesafesi", "Truck distance", p => { p.truck_km = 100; }, p => { p.truck_km = 500; }],
+  ["harvest", "Hasat ve yongalama", "Harvest and chipping", p => { p.harvest = 1.2; }, p => { p.harvest = 2.0; }],
+  ["dm_rate", "Kuru madde kaybı hızı", "Dry-matter loss rate", p => { p.dm_rate = 0.6; }, p => { p.dm_rate = 2.6; }],
+  ["dm_months", "Depoda bekleme süresi", "Storage time", p => { p.dm_months = 1; }, p => { p.dm_months = 6; }],
+  ["n2o_bio", "Odun N₂O faktörü", "Wood N₂O factor", p => { p.n2o_bio = 4; }, p => { p.n2o_bio = 14; }],
+  ["ch4_bio", "Odun CH₄ faktörü", "Wood CH₄ factor", p => { p.ch4_bio = 1.4; }, p => { p.ch4_bio = 11; }],
+  ["CaS", "Ca/S oranı", "Ca/S ratio", p => { p.CaS = 2; }, p => { p.CaS = 3; }],
+  ["coalS", "Kömür kükürdü", "Coal sulphur", p => { p.coal.S = 0.5; }, p => { p.coal.S = 1.0; }],
+  ["nh3w", "Amonyak suyu", "Ammonia water", p => { p.nh3w = 0.15; }, p => { p.nh3w = 0.85; }],
+  ["sand", "Yatak kumu", "Bed sand", p => { p.sand = 3; }, p => { p.sand = 6; }],
+  ["M_bio", "Yonga nemi", "Chip moisture", p => { p.M_bio = 40; }, p => { p.M_bio = 55; }],
+];
+
+// ---------------------------------------------------------------- parametre tanımları
+const GRUPLAR = [
+  { tr: "A. Ülke profili", en: "A. Country profile", p: [
+    { k: "ulke", tur: "secenek", tr: "Ülke", en: "Country", sec: Object.keys(ULKELER), kaynak: "Finlandiya ve diğerleri resmi kaynaklarla eklenecek / Finland and others to be added from official sources" },
+    { k: "grid", tur: "girdi", tr: "Şebeke elektriği ayak izi", en: "Grid electricity footprint", u: "kg CO₂e/kWh", st: 0.001, onay: 1, kaynak: "Lewandowska 2025, Tablo 15" },
+    { k: "mine_ch4", tur: "girdi", tr: "Maden metanı", en: "Coal mine methane", u: "kg CH₄/t", st: 0.01, kaynak: "NID 2026, Tablo 3.3.1–3.3.2" },
+    { k: "mining_co2", tur: "girdi", tr: "Madencilik CO₂ (metan dışı)", en: "Mining CO₂ (non-methane)", u: "g CO₂e/MJ", st: 0.01, onay: 1, kaynak: "GUS 2025 + Lewandowska 2025" },
+    { k: "train_ef", tur: "girdi", tr: "Tren emisyon faktörü", en: "Rail emission factor", u: "g CO₂e/t·km", st: 0.1, kaynak: "PKP Cargo 2022, s.49" },
+    { k: "LHV_coal", tur: "girdi", tr: "Kömür ısıl değeri", en: "Coal heating value", u: "MJ/kg", st: 0.01, kaynak: "KOBiZE 2026, Tablo 1" },
+    { k: "EF_coal", tur: "girdi", tr: "Kömür yanma CO₂ faktörü", en: "Coal combustion CO₂ factor", u: "kg CO₂/GJ", st: 0.01, kaynak: "KOBiZE 2026, Tablo 1" },
+    { k: "eurpln", tur: "girdi", tr: "Döviz kuru", en: "Exchange rate", u: "PLN/€", st: 0.001, kaynak: "NBP Tablo A, 28.10.2026" },
+    { k: "p_coal", tur: "girdi", tr: "Kömür fiyatı", en: "Coal price", u: "PLN/GJ", st: 0.01, kaynak: "ARP/TGE PSCMI1" },
+    { k: "p_bio", tur: "girdi", tr: "Yonga fiyatı", en: "Wood chip price", u: "PLN/GJ", st: 0.01, kaynak: "URE 2025, Tablo 4" },
+    { k: "p_el", tur: "girdi", tr: "Elektrik fiyatı", en: "Electricity price", u: "PLN/MWh", st: 0.1, kaynak: "TGE 2025" },
+  ]},
+  { tr: "B. Kazanın içi", en: "B. Inside the boiler", p: [
+    { k: "T_yatak", tur: "kaydirici", tr: "Yatak sıcaklığı", en: "Bed temperature", u: "°C", min: 800, max: 950, st: 5, onay: 1, kaynak: "Łagisza vekili, Myöhänen 2009 Şekil 7" },
+    { k: "n2o_mod", tur: "secenek", tr: "__n2omod", sec: ["sicaklik", "elle"], kaynak: "Kural: vakaya en yakın ölçüm" },
+    { k: "_n2o_used", tur: "turetilmis", tr: "Kömür N₂O faktörü (kullanılan)", en: "Coal N₂O factor (used)", u: "kg/TJ", onay: 1, kaynak: ">900 °C 30 · 860–900 45 · <860 61 (Tsupari 2007; IPCC 2006)" },
+    { k: "n2o_coal_elle", tur: "girdi", tr: "Kömür N₂O, elle", en: "Coal N₂O, manual", u: "kg/TJ", st: 1, kaynak: "Yalnız 'elle' seçiliyse / only if manual" },
+    { k: "n2o_bio", tur: "girdi", tr: "Odun N₂O", en: "Wood N₂O", u: "kg/TJ", st: 0.5, kaynak: "Tsupari 2007, Tablo 6" },
+    { k: "ch4_coal", tur: "girdi", tr: "Kömür CH₄ (kazanda)", en: "Coal CH₄ (in boiler)", u: "kg/TJ", st: 0.1, kaynak: "Tsupari 2007, Tablo 3 ve 6" },
+    { k: "ch4_bio", tur: "girdi", tr: "Odun CH₄ (kazanda)", en: "Wood CH₄ (in boiler)", u: "kg/TJ", st: 0.1, kaynak: "Tsupari 2007, Tablo 6" },
+    { k: "c_ash", tur: "girdi", tr: "Külde yanmamış karbon", en: "Unburnt carbon in ash", u: "kg C/kg", st: 0.005, kaynak: "Qi 2017; Mei 2014" },
+    { k: "O2ref", tur: "sabit", tr: "Referans O₂", en: "Reference O₂", u: "%", kaynak: "2010/75/AB Ek V" },
+  ]},
+  { tr: "C. Yakıtlar", en: "C. Fuels", p: [
+    { k: "M_bio", tur: "kaydirici", tr: "Yonga nemi", en: "Chip moisture", u: "%", min: 25, max: 60, st: 1, kaynak: "Wihersaari 2005a, Tablo 1" },
+    { k: "LHV_bio_d", tur: "girdi", tr: "Yonga ısıl değeri (kuru)", en: "Chip heating value (dry)", u: "MJ/kg", st: 0.1, kaynak: "VTT T272, Tablo 4.15" },
+    { k: "_LHV_ar", tur: "turetilmis", tr: "Yonga ısıl değeri (nemli)", en: "Chip heating value (as received)", u: "MJ/kg", kaynak: "EN ISO 18125" },
+    { k: "bio_d.S", tur: "girdi", tr: "Yonga kükürdü (kuru)", en: "Chip sulphur (dry)", u: "%", st: 0.01, kaynak: "Vassilev 2010, Tablo 5" },
+    { k: "coal.S", tur: "girdi", tr: "Kömür kükürdü", en: "Coal sulphur", u: "%", st: 0.05, kaynak: "Burmistrz & Kogut 2016" },
+  ]},
+  { tr: "D. Kükürt tutma (yalnız kömürlü kazan)", en: "D. Sulphur capture (coal boiler only)", p: [
+    { k: "CaS", tur: "girdi", tr: "Ca/S mol oranı", en: "Ca/S molar ratio", u: "mol/mol", st: 0.1, kaynak: "LCP BREF 2017; Basu 2015 s.140" },
+    { k: "capture", tur: "girdi", tr: "Kükürt tutma oranı", en: "Sulphur capture", u: "—", st: 0.01, kaynak: "Xu 2024, Tablo 1" },
+    { k: "purity", tur: "girdi", tr: "Kireçtaşı saflığı (CaCO₃)", en: "Limestone purity (CaCO₃)", u: "kg/kg", st: 0.001, onay: 1, kaynak: "Xu 2024, s.20057" },
+  ]},
+  { tr: "E. Kömür tedarik zinciri", en: "E. Coal supply chain", p: [
+    { k: "train_km", tur: "kaydirici", tr: "Tren mesafesi", en: "Rail distance", u: "km", min: 0, max: 500, st: 10, kaynak: "Varsayım, kullanıcı değiştirir / assumption" },
+  ]},
+  { tr: "F. Yonga tedarik zinciri", en: "F. Wood chip supply chain", p: [
+    { k: "harvest", tur: "girdi", tr: "Hasat ve yongalama", en: "Harvest and chipping", u: "g CO₂e/MJ", st: 0.1, kaynak: "JRC 2017, Tablo 91" },
+    { k: "truck_km", tur: "kaydirici", tr: "Kamyon mesafesi", en: "Truck distance", u: "km", min: 0, max: 600, st: 10, kaynak: "Gendek & Nurek 2016" },
+    { k: "_truck", tur: "turetilmis", tr: "Kamyon faktörü (dizelden)", en: "Truck factor (from diesel)", u: "g CO₂e/MJ yonga", onay: 1, kaynak: "Kühmaier 2022; Stolarski 2023; JRC 2017" },
+    { k: "dm_rate", tur: "girdi", tr: "Kuru madde kaybı", en: "Dry-matter loss", u: "%/ay", st: 0.1, kaynak: "Wihersaari 2005b, s.446" },
+    { k: "dm_months", tur: "kaydirici", tr: "Depoda bekleme", en: "Storage time", u: "ay", min: 0, max: 12, st: 0.5, onay: 1, kaynak: "Varsayım / assumption" },
+  ]},
+  { tr: "G. Elektrik ve sarf malzemeleri", en: "G. Power and consumables", p: [
+    { k: "aux_coal", tur: "girdi", tr: "Yardımcı elektrik, kömür", en: "Auxiliary power, coal", u: "kWh/MWh yakıt", st: 0.5, kaynak: "Lockwood 2013, Tablo 5" },
+    { k: "aux_bio", tur: "girdi", tr: "Yardımcı elektrik, biyokütle", en: "Auxiliary power, biomass", u: "kWh/MWh yakıt", st: 0.5, kaynak: "Mühendislik tahmini (kaynaksız) / engineering estimate" },
+    { k: "nh3w", tur: "girdi", tr: "Amonyak suyu (%25)", en: "Ammonia water (25%)", u: "kg/MWh yakıt", st: 0.01, kaynak: "Mahmoudi 2010, s.1406" },
+    { k: "sand", tur: "girdi", tr: "Yatak kumu (biyokütle payı)", en: "Bed sand (biomass share)", u: "kg/MWh yakıt", st: 0.5, kaynak: "Leckner & Lind 2020 §6" },
+    { k: "lime_prod", tur: "girdi", tr: "Kum ve kireçtaşı üretimi", en: "Sand and limestone production", u: "kg CO₂e/t", st: 0.5, kaynak: "Kırma taş EPD'leri" },
+    { k: "malz_tasima", tur: "secenek", tr: "__malztasima", sec: [false, true], kaynak: "Varsayılan kapalı, belgeyle aynı sayılar / off by default" },
+    { k: "malz_arac", tur: "secenek", tr: "Taşıma aracı", en: "Vehicle", sec: ["kamyon", "tren"], kaynak: "DESNZ 2026 (kamyon 96,3) · PKP Cargo 2022 (tren 18,5) g/t·km" },
+    { k: "malz_km", tur: "kaydirici", tr: "Taş ocağı mesafesi", en: "Quarry distance", u: "km", min: 0, max: 500, st: 10, kaynak: "Varsayım / assumption" },
+  ]},
+  { tr: "H. Ekonomi", en: "H. Economics", p: [
+    { k: "ets", tur: "kaydirici", tr: "ETS fiyatı", en: "ETS price", u: "€/t CO₂", min: 0, max: 200, st: 1, kaynak: "KOBiZE rapor nr 174" },
+    { k: "bio_sertifikali", tur: "secenek", tr: "__sertifika", sec: [true, false], kaynak: "RED III, %80 tasarruf şartı" },
+    { k: "p_lime", tur: "girdi", tr: "Kireçtaşı sorbenti fiyatı (teslim)", en: "Limestone sorbent price (delivered)", u: "€/t", st: 1, kaynak: "TED 551112-2023 (Termika Żerań), 793352-2024, 796961-2025 · aralık 18–66" },
+    { k: "p_nh3w", tur: "girdi", tr: "Amonyak suyu %25 fiyatı", en: "Ammonia water 25% price", u: "€/t", st: 5, kaynak: "TED 71297-2026 (PGE EC) · aralık 125–560" },
+    { k: "p_sand", tur: "girdi", tr: "Yatak kumu fiyatı", en: "Bed sand price", u: "€/t", st: 1, kaynak: "Rydén 2018, Appl. Sci. 8:2657 s.19 · aralık 15–135" },
+    { k: "p_oil", tur: "girdi", tr: "Isıtma yağı fiyatı (vergisiz)", en: "Heating oil price (excl. taxes)", u: "€/t", st: 10, kaynak: "AB Weekly Oil Bulletin, Polonya, 2023–2025 ort." },
+  ]},
+  { tr: "I. Sabitler", en: "I. Constants", p: [
+    { k: "GWP_N2O", tur: "sabit", tr: "N₂O GWP100", en: "N₂O GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
+    { k: "GWP_CH4_fos", tur: "sabit", tr: "Fosil CH₄ GWP100", en: "Fossil CH₄ GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
+    { k: "GWP_CH4_bio", tur: "sabit", tr: "Biyojenik CH₄ GWP100", en: "Biogenic CH₄ GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
+  ]},
+];
+
+// ---------------------------------------------------------------- durum
+const kopya = o => JSON.parse(JSON.stringify(o));
+let dil = "en", P = kopya(VARSAYILAN), KZ = kopya(KAZANLAR), gorunum = "kaynak", odak = 1, buhar = 795, secili = null;
+try {
+  const s = JSON.parse(localStorage.getItem("donusum-araci") || "null");
+  if (s) { dil = s.dil || dil; P = Object.assign(kopya(VARSAYILAN), s.P || {}); KZ = s.KZ || KZ; buhar = s.buhar || buhar; gorunum = s.gorunum || gorunum; }
+} catch (e) {}
+const kaydet = () => { try { localStorage.setItem("donusum-araci", JSON.stringify({ dil, P, KZ, buhar, gorunum })); } catch (e) {} };
+const t = k => T[dil][k];
+const fmt = (v, d = 1) => (v ?? 0).toLocaleString(dil === "tr" ? "tr-TR" : "en-GB", { minimumFractionDigits: d, maximumFractionDigits: d });
+const al = k => k.includes(".") ? P[k.split(".")[0]][k.split(".")[1]] : P[k];
+const ver = (k, v) => { if (k.includes(".")) { const [a, b] = k.split("."); P[a][b] = v; } else P[k] = v; };
+const kAd = k => KALEM[k][dil][0];
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+
+// ---------------------------------------------------------------- ipucu kutusu
+const tip = document.getElementById("tip");
+function ipucuBagla(root) {
+  root.querySelectorAll("[data-tip]").forEach(s => {
+    s.addEventListener("mousemove", e => { tip.innerHTML = s.dataset.tip; tip.style.display = "block"; tip.style.left = Math.min(e.clientX + 14, innerWidth - 290) + "px"; tip.style.top = e.clientY + 14 + "px"; });
+    s.addEventListener("mouseleave", () => { tip.style.display = "none"; });
+  });
+}
+function ticks(max) {
+  const step = [0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 250, 500, 1000].find(s => max / s <= 5) || 2000;
+  const ust = Math.ceil(max / step) * step;
+  const a = []; for (let v = 0; v <= ust + 1e-9; v += step) a.push(+v.toFixed(6)); return a;
+}
+
+// ---------------------------------------------------------------- kazan kartları
+function kazanKartlari() {
+  const el = document.getElementById("kazanlar");
+  el.innerHTML = "";
+  KZ.forEach((k, i) => {
+    const d = document.createElement("div");
+    d.className = "card boiler";
+    d.innerHTML = `
+      <div class="row"><span class="dot" style="background:var(${KAZAN_RENK[i % 8]})"></span><input type="text" value="${esc(k.ad)}" data-f="ad" aria-label="${t("ad")}">
+        ${i === 0 ? `<span class="ref">${t("referans")}</span>` : `<button class="x" title="${t("sil")}" data-sil>×</button>`}</div>
+      <div class="row"><label>${t("komur")}</label><span class="rv">%${k.share_coal}</span></div>
+      <input type="range" min="0" max="100" step="5" value="${k.share_coal}" data-f="share_coal" aria-label="${t("komur")}">
+      <div class="row"><label>${t("verim")}</label><input type="number" step="0.005" value="${k.eta}" data-f="eta"></div>
+      <div class="row"><label>${t("kap")}, MW</label><input type="number" step="0.1" value="${+k.kap.toFixed(1)}" data-f="kap"></div>
+      <div class="row"><label>${t("saat")}, h/a</label><input type="number" step="100" value="${k.saat}" data-f="saat"></div>
+      <div class="row"><label>${t("kirec")}</label><input type="checkbox" ${k.kirectasi ? "checked" : ""} data-f="kirectasi"></div>`;
+    d.querySelectorAll("[data-f]").forEach(inp => {
+      inp.addEventListener("input", () => {
+        const f = inp.dataset.f;
+        k[f] = f === "ad" ? inp.value : f === "kirectasi" ? inp.checked : +inp.value;
+        if (f === "share_coal") inp.previousElementSibling.querySelector(".rv").textContent = "%" + k.share_coal;
+        if (f === "ad") odakListesi();
+        guncelle();
+      });
+    });
+    const sil = d.querySelector("[data-sil]");
+    if (sil) sil.addEventListener("click", () => { KZ.splice(i, 1); if (odak >= KZ.length) odak = KZ.length - 1; secili = null; kazanKartlari(); odakListesi(); guncelle(); });
+    el.appendChild(d);
+  });
+}
+function odakListesi() {
+  const s = document.getElementById("odak");
+  s.innerHTML = KZ.map((k, i) => `<option value="${i}" ${i === odak ? "selected" : ""}>${esc(k.ad)}</option>`).join("");
+}
+
+// ---------------------------------------------------------------- parametre tabloları
+function parametreler() {
+  document.getElementById("turler").innerHTML = Object.entries(t("turler")).map(([k, v]) => `<span class="t t-${k}">${v}</span>`).join("") + `<span class="onay">${t("onay")}</span>`;
+  const el = document.getElementById("params");
+  el.innerHTML = "";
+  GRUPLAR.forEach((g, gi) => {
+    const det = document.createElement("details");
+    det.className = "grp";
+    if (gi < 2) det.open = true;
+    const satirlar = g.p.map(p => {
+      const ad = p.tr.startsWith("__") ? t(p.tr.slice(2)) : p[dil];
+      let kontrol = "";
+      if (p.tur === "secenek") {
+        const etiket = v => v === true ? t("evet") : v === false ? t("hayir") : ULKELER[v] ? ULKELER[v].ad[dil] : t(v);
+        kontrol = `<select data-k="${p.k}">${p.sec.map(v => `<option value="${v}" ${String(al(p.k)) === String(v) ? "selected" : ""}>${etiket(v)}</option>`).join("")}</select>`;
+      } else if (p.tur === "kaydirici") {
+        kontrol = `<input type="range" min="${p.min}" max="${p.max}" step="${p.st}" value="${al(p.k)}" data-k="${p.k}" aria-label="${ad}"><span class="rv" data-rv="${p.k}">${al(p.k)}</span>`;
+      } else if (p.tur === "turetilmis") {
+        kontrol = `<span class="rv" data-der="${p.k}"></span>`;
+      } else if (p.tur === "sabit") {
+        kontrol = `<span class="rv">${al(p.k)}</span>`;
+      } else {
+        kontrol = `<input type="number" step="${p.st}" value="${+(+al(p.k)).toFixed(4)}" data-k="${p.k}" aria-label="${ad}">`;
+      }
+      return `<tr><td>${ad} ${p.onay ? `<span class="onay">${t("onay")}</span>` : ""}</td><td>${kontrol}</td><td>${p.u || ""}</td>
+        <td><span class="t t-${p.tur}">${t("turler")[p.tur]}</span></td><td class="src">${p.kaynak}</td></tr>`;
+    }).join("");
+    det.innerHTML = `<summary>${g[dil]}</summary><div class="wrap"><table class="ptable">
+      <tr><th>${t("kalem")}</th><th>${t("deger")}</th><th>${t("birimk")}</th><th>${t("tur")}</th><th>${t("kaynak")}</th></tr>${satirlar}</table></div>`;
+    el.appendChild(det);
+  });
+  el.querySelectorAll("[data-k]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      const k = inp.dataset.k;
+      let v = inp.value;
+      if (v === "true" || v === "false") v = v === "true";
+      else if (k === "ulke") { Object.assign(P, ULKELER[v]); P.ulke = v; parametreler(); guncelle(); return; }
+      else if (!["n2o_mod", "malz_arac"].includes(k)) v = +v;
+      ver(k, v);
+      const rv = el.querySelector(`[data-rv="${k}"]`);
+      if (rv) rv.textContent = v;
+      guncelle();
+    });
+  });
+}
+
+// ---------------------------------------------------------------- yığılmış çubuk
+function cubuk(hedef, lgHedef, sonuclar, gruplar, kaynak, sozluk, birim, opt = {}) {
+  document.getElementById(lgHedef).innerHTML = gruplar.map(([k, , c]) => `<span><i style="background:var(${c})"></i>${t(sozluk)[k]}</span>`).join("");
+  const carp = opt.carp || (() => 1);
+  const toplamlar = sonuclar.map((K, i) => gruplar.reduce((s, [, ks]) => s + ks.reduce((a, x) => a + K[kaynak][x], 0), 0) * carp(K, i));
+  const tk = ticks(Math.max(...toplamlar, 1e-6) * 1.2);
+  const olcek = tk[tk.length - 1];
+  const d = opt.d ?? 1;
+  let h = "";
+  sonuclar.forEach((K, i) => {
+    let x = 0, segs = "";
+    const dolu = gruplar.map(([k, ks, c]) => [k, ks.reduce((a, y) => a + K[kaynak][y], 0) * carp(K, i), c, ks]).filter(s => s[1] > 1e-9);
+    dolu.forEach(([k, v, c, ks], j) => {
+      const w = v / olcek * 100;
+      const cls = dolu.length === 1 ? "only" : j === 0 ? "first" : j === dolu.length - 1 ? "last" : "";
+      const sel = secili && opt.tikla && secili.i === i && secili.g === k ? " sel" : "";
+      segs += `<div class="seg ${cls}${sel}" style="left:${x}%;width:${w}%;background:var(${c})" data-i="${i}" data-g="${k}" data-ks="${ks.join(",")}" data-c="${c}"
+        data-tip="${esc(K.ad)}<br><b>${t(sozluk)[k]}</b>: ${fmt(v, d + 1)} ${birim} (%${fmt(v / toplamlar[i] * 100, 0)})"></div>`;
+      x += w;
+    });
+    h += `<div class="barrow"><div class="name" title="${esc(K.ad)}">${esc(K.ad)}</div><div class="track">${segs}<span class="tot" style="left:${x}%">${fmt(toplamlar[i], d)}</span></div></div>`;
+  });
+  h += `<div class="axis"><div></div><div class="ticks">${tk.map(v => `<span style="left:${v / olcek * 100}%">${fmt(v, olcek < 5 ? 1 : 0)}</span>`).join("")}</div></div>`;
+  const el = document.getElementById(hedef);
+  el.innerHTML = h;
+  ipucuBagla(el);
+  if (opt.tikla) el.querySelectorAll(".seg").forEach(s => s.addEventListener("click", () => opt.tikla(+s.dataset.i, s.dataset.g, s.dataset.ks.split(","), s.dataset.c)));
+}
+
+// ---------------------------------------------------------------- "nereden geliyor" paneli
+function detayHtml(K, baslik, ks, renk) {
+  const top = ks.reduce((a, k) => a + K.em[k], 0);
+  const items = ks.filter(k => K.em[k] > 1e-9).sort((a, b) => K.em[b] - K.em[a]).map(k => {
+    const m = KALEM[k], x = m[dil];
+    const pay = K.em[k] / K.toplam * 100;
+    return `<div class="item"><div><b>${x[0]}</b></div><div class="v">${fmt(K.em[k], 2)} <span class="csub">kg CO₂e</span></div>
+      <div class="mini"><span style="width:${Math.min(pay, 100)}%;background:var(${RENK_KALEM[k]})"></span></div>
+      <div class="d">%${fmt(pay, 1)} ${t("payi")} · <b>${t("asama")}:</b> ${t("a")[m.asama]}</div>
+      <div class="d"><b>${t("nerede")}:</b> ${x[1]}</div>
+      <div class="d"><b>${t("neden")}:</b> ${x[2]}</div>
+      <div class="d"><b>${t("formul")}:</b> ${x[3]}</div>
+      <div class="d"><b>${t("kaynak")}:</b> ${m.src}</div></div>`;
+  }).join("");
+  const bos = ks.every(k => K.em[k] <= 1e-9);
+  return `<div class="panel" style="--c:var(${renk})">
+    <div style="display:flex;justify-content:space-between;gap:10px"><div><h4>${baslik}</h4>
+    <div class="meta">${esc(K.ad)} · ${fmt(top, 2)} kg CO₂e / MWh · %${fmt(top / K.toplam * 100, 1)} ${t("payi")}</div></div>
+    <button class="x" data-kapat title="${t("kapat")}">×</button></div>
+    ${bos ? `<div class="d csub">0</div>` : items}</div>`;
+}
+function detayAc(hedef, i, baslik, ks, renk) {
+  const R = hesapla(P, KZ);
+  const el = document.getElementById(hedef);
+  el.innerHTML = detayHtml(R.kazanlar[i], baslik, ks, renk);
+  el.querySelector("[data-kapat]").addEventListener("click", () => { el.innerHTML = ""; secili = null; guncelle(); });
+}
+
+// ---------------------------------------------------------------- pareto
+function pareto(K) {
+  const ks = Object.keys(K.em).filter(k => K.em[k] > 1e-9).sort((a, b) => K.em[b] - K.em[a]);
+  const enb = K.em[ks[0]] || 1;
+  let bir = 0;
+  const el = document.getElementById("ch-pareto");
+  el.innerHTML = ks.map(k => {
+    bir += K.em[k];
+    return `<div class="row" data-k="${k}" data-tip="<b>${kAd(k)}</b>: ${fmt(K.em[k], 2)} kg CO₂e<br>${t("payi")}: %${fmt(K.em[k] / K.toplam * 100, 1)} · Σ %${fmt(bir / K.toplam * 100, 0)}">
+      <div class="nm">${kAd(k)}</div>
+      <div><div class="bar" style="width:${Math.max(K.em[k] / enb * 100, 0.8)}%;background:var(${RENK_KALEM[k]})"></div></div>
+      <div class="pc">%${fmt(K.em[k] / K.toplam * 100, 1)}</div></div>`;
+  }).join("");
+  ipucuBagla(el);
+  el.querySelectorAll(".row").forEach(r => r.addEventListener("click", () => {
+    const k = r.dataset.k;
+    detayAc("detay", odak, kAd(k), [k], RENK_KALEM[k]);
+    document.getElementById("detay").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }));
+}
+
+// ---------------------------------------------------------------- köprü (şelale)
+function kopru(ref, K) {
+  document.getElementById("h-kopru").textContent = `${t("h_kopru")}: ${ref.ad} → ${K.ad}`;
+  const ks = Object.keys(K.em).map(k => [k, K.em[k] - ref.em[k]]).filter(([, d]) => Math.abs(d) > 0.05).sort((a, b) => Math.abs(b[1]) - Math.abs(a[1]));
+  let cur = ref.toplam;
+  const adim = ks.map(([k, d]) => { const a = cur; cur += d; return [k, d, a, cur]; });
+  const max = Math.max(ref.toplam, K.toplam, ...adim.map(s => Math.max(s[2], s[3])));
+  const pct = v => v / max * 100;
+  const row = (nm, a, b, c, val, cls = "") => `<div class="row ${cls}"><div class="nm" title="${esc(nm)}">${esc(nm)}</div><div class="trk">
+    <div class="b" style="left:${pct(Math.min(a, b))}%;width:${Math.max(pct(Math.abs(b - a)), 0.4)}%;background:${c}"></div></div><div class="vv">${val}</div></div>`;
+  let h = row(ref.ad, 0, ref.toplam, "var(--muted)", fmt(ref.toplam, 1), "endrow");
+  adim.forEach(([k, d, a, b]) => {
+    h += `<div data-tip="<b>${kAd(k)}</b>: ${d > 0 ? "+" : "−"}${fmt(Math.abs(d), 2)} kg CO₂e">` +
+      row(kAd(k), a, b, d < 0 ? "var(--s3)" : "var(--s8)", (d > 0 ? "+" : "−") + fmt(Math.abs(d), 1)) + "</div>";
+  });
+  h += row(K.ad, 0, K.toplam, "var(--muted)", fmt(K.toplam, 1), "endrow");
+  const el = document.getElementById("ch-kopru");
+  el.innerHTML = h;
+  ipucuBagla(el);
+}
+
+// ---------------------------------------------------------------- tornado
+function tornado() {
+  document.getElementById("lg-tornado").innerHTML = `<span><i style="background:var(--s1)"></i>${t("alt_uc")}</span><span><i style="background:var(--s2)"></i>${t("ust_uc")}</span>`;
+  const taban = hesapla(P, KZ).kazanlar[odak].toplam;
+  const satirlar = TOR.map(([key, tr, en, lo, hi]) => {
+    let rl, rh;
+    if (key === "eta") {
+      const k1 = kopya(KZ), k2 = kopya(KZ);
+      k1[odak].eta = Math.min(KZ[odak].eta + 0.017, 0.99); k2[odak].eta = KZ[odak].eta - 0.02;
+      rl = hesapla(P, k1).kazanlar[odak].toplam; rh = hesapla(P, k2).kazanlar[odak].toplam;
+    } else {
+      const pl = kopya(P), ph = kopya(P); lo(pl); hi(ph);
+      rl = hesapla(pl, KZ).kazanlar[odak].toplam; rh = hesapla(ph, KZ).kazanlar[odak].toplam;
+    }
+    return { ad: dil === "tr" ? tr : en, a: Math.min(rl, rh), b: Math.max(rl, rh) };
+  }).filter(s => s.b - s.a > 0.05).sort((x, y) => (y.b - y.a) - (x.b - x.a)).slice(0, 10);
+  const lo = Math.min(...satirlar.map(s => s.a), taban), hi = Math.max(...satirlar.map(s => s.b), taban);
+  const pad = (hi - lo) * 0.08 || 1;
+  const L = lo - pad, H = hi + pad, pct = v => (v - L) / (H - L) * 100;
+  const el = document.getElementById("ch-tornado");
+  el.innerHTML = satirlar.map(s => `<div class="row" data-tip="<b>${s.ad}</b><br>${fmt(s.a, 1)} – ${fmt(s.b, 1)} kg CO₂e / MWh"><div class="nm">${s.ad}</div><div class="trk">
+      <div class="b" style="left:${pct(s.a)}%;width:${pct(taban) - pct(s.a)}%;background:var(--s1);border-radius:3px 0 0 3px"></div>
+      <div class="b" style="left:${pct(taban)}%;width:${pct(s.b) - pct(taban)}%;background:var(--s2);border-radius:0 3px 3px 0"></div>
+      <div class="zero" style="left:${pct(taban)}%"></div></div>
+      <div class="vv">±${fmt((s.b - s.a) / 2, 1)}</div></div>`).join("") +
+    `<div class="row"><div></div><div class="csub" style="text-align:center;margin:4px 0 0">${t("toplam")}: ${fmt(taban, 1)} · ${fmt(L, 0)} – ${fmt(H, 0)} kg CO₂e / MWh</div><div></div></div>`;
+  ipucuBagla(el);
+}
+
+// ---------------------------------------------------------------- ETS çizgi grafiği
+function etsGrafik(S) {
+  const xs = []; for (let e = 0; e <= 200; e += 10) xs.push(e);
+  const seri = S.map((_, i) => xs.map(e => { const q = kopya(P); q.ets = e; return hesapla(q, KZ).kazanlar[i].cost_top; }));
+  const ymax = ticks(Math.max(...seri.flat()) * 1.1), Y = ymax[ymax.length - 1];
+  const W = 520, Hh = 240, l = 40, r = 12, tp = 12, b = 26;
+  const px = e => l + e / 200 * (W - l - r), py = v => tp + (1 - v / Y) * (Hh - tp - b);
+  let svg = `<svg viewBox="0 0 ${W} ${Hh}" width="100%" role="img" aria-label="${t("h_ets")}">`;
+  ymax.forEach(v => { svg += `<line class="gl" x1="${l}" x2="${W - r}" y1="${py(v)}" y2="${py(v)}"/><text x="${l - 6}" y="${py(v) + 4}" text-anchor="end">${fmt(v, 0)}</text>`; });
+  [0, 50, 100, 150, 200].forEach(e => { svg += `<text x="${px(e)}" y="${Hh - 8}" text-anchor="middle">${e}</text>`; });
+  svg += `<line x1="${px(P.ets)}" x2="${px(P.ets)}" y1="${tp}" y2="${Hh - b}" stroke="var(--muted)" stroke-dasharray="3 3"/><text x="${px(P.ets) + 4}" y="${tp + 10}">${t("ets_bugun")} ${fmt(P.ets, 0)} €/t</text>`;
+  seri.forEach((ys, i) => {
+    svg += `<polyline fill="none" stroke="var(${KAZAN_RENK[i % 8]})" stroke-width="2" points="${ys.map((v, j) => `${px(xs[j])},${py(v)}`).join(" ")}"/>`;
+    const q = kopya(P); const v = hesapla(q, KZ).kazanlar[i].cost_top;
+    svg += `<circle cx="${px(P.ets)}" cy="${py(v)}" r="4.5" fill="var(${KAZAN_RENK[i % 8]})" stroke="var(--card)" stroke-width="2"><title>${esc(S[i].ad)}: ${fmt(v, 2)} €/MWh</title></circle>`;
+  });
+  svg += `<text x="${l}" y="${Hh - 8}" text-anchor="start" dx="-34">€/t</text></svg>`;
+  document.getElementById("ch-ets").innerHTML = svg;
+  document.getElementById("lg-ets").innerHTML = S.map((K, i) => `<span><span class="ln" style="background:var(${KAZAN_RENK[i % 8]})"></span>${esc(K.ad)}</span>`).join("");
+  // odak kazanın referansla kesişimi: maliyet ETS'ye göre doğrusal
+  const f = (i, e) => { const q = kopya(P); q.ets = e; return hesapla(q, KZ).kazanlar[i].cost_top; };
+  let not = "";
+  if (odak > 0) {
+    const a0 = f(0, 0), a1 = f(0, 100), b0 = f(odak, 0), b1 = f(odak, 100);
+    const s0 = (a1 - a0) / 100, s1 = (b1 - b0) / 100;
+    const x = Math.abs(s0 - s1) < 1e-12 ? null : (b0 - a0) / (s0 - s1);
+    if (b0 <= a0 && (b1 <= a1)) not = t("ets_hep");
+    else if (x !== null && x >= 0 && x <= 200) not = t("ets_kesisim").replace("{x}", fmt(x, 0));
+    else not = t("ets_hic");
+    not = `${esc(KZ[odak].ad)}: ${not}`;
+  }
+  document.getElementById("ets-not").textContent = not;
+}
+
+// ---------------------------------------------------------------- yıllık karşılaştırma
+function paraBolumu(S) {
+  const sl = document.getElementById("buhar");
+  sl.value = buhar;
+  document.getElementById("buhar-v").textContent = fmt(buhar, 0);
+  document.getElementById("buhar-not").textContent = t("buharnot");
+  const G = buhar; // GWh = bin MWh
+  const carpM = () => G / 1000;  // €/MWh × GWh / 1000 = M€
+  cubuk("ch-yil", "lg-yil", S, GRUP_MALIYET, "cost", "c", "M€", { carp: carpM, d: 1 });
+  cubuk("ch-yilk", "lg-yilk", S, GRUP_KARBON, "em", "g", "kt CO₂e", { carp: () => G / 1000, d: 1 });
+  const ref = S[0], K = S[odak];
+  if (!K || odak === 0) { document.getElementById("tasarruf").innerHTML = ""; return; }
+  const dM = (K.cost_top - ref.cost_top) * G / 1000;          // M€/yıl
+  const dGun = dM * 1e6 / 365;
+  const dC = (K.toplam - ref.toplam) * G;                    // t/yıl
+  const dE = (K.cost.ets - ref.cost.ets) * G / 1000;
+  const kart = (v, lbl, iyi, birim) => `<div class="card"><div class="big ${iyi ? "good" : "badv"}">${v} <span style="font-size:1rem">${birim}</span></div><div class="lbl">${lbl}</div></div>`;
+  const yon = (v, a, b) => v < 0 ? t(a) : t(b);
+  document.getElementById("tasarruf").innerHTML =
+    kart(fmt(Math.abs(dM), 1), `${esc(K.ad)}: ${t("tas_yil")} (${yon(dM, "ucuz", "pahali")})`, dM < 0, "M€") +
+    kart(fmt(Math.abs(dGun) / 1000, 1), `${t("tas_gun")} (${yon(dM, "ucuz", "pahali")})`, dM < 0, "bin €") +
+    kart(fmt(Math.abs(dC) / 1000, 1), `${t("tas_co2")} (${yon(dC, "az", "fazla")})`, dC < 0, "kt CO₂e") +
+    kart(fmt(Math.abs(dE), 1), `${t("tas_ets")} (${yon(dE, "az", "fazla")})`, dE <= 0, "M€");
+}
+
+// ---------------------------------------------------------------- ana güncelleme
+function guncelle() {
+  const R = hesapla(P, KZ);
+  const S = R.kazanlar;
+  if (!S.length) return;
+  if (odak >= S.length) odak = S.length - 1;
+  const ref = S[0];
+  const der = { _n2o_used: fmt(R.ortak.n2oc, 0), _LHV_ar: fmt(R.ortak.LHV_bio, 2), _truck: fmt(R.ortak.tr * P.truck_km, 2) };
+  document.querySelectorAll("[data-der]").forEach(e => { e.textContent = der[e.dataset.der]; });
+  // kahraman kartlar
+  document.getElementById("heroes").innerHTML = S.map((K, i) => {
+    const d = (K.toplam - ref.toplam) / ref.toplam * 100;
+    const ilk3 = Object.keys(K.em).sort((a, b) => K.em[b] - K.em[a]).slice(0, 3).map(k => `${kAd(k)} %${fmt(K.em[k] / K.toplam * 100, 0)}`).join(" · ");
+    return `<div class="card hero" style="border-top:4px solid var(${KAZAN_RENK[i % 8]})"><h3>${esc(K.ad)}</h3>
+      <div class="big">${fmt(K.toplam, 1)}</div><div class="unit">${t("birim")}</div>
+      ${i > 0 ? `<span class="delta ${d > 0 ? "up" : ""}">${d > 0 ? "+" : "−"}%${fmt(Math.abs(d), 1)} ${t("azalma")}</span>` : ""}
+      <div class="line"><span>${t("fosilbaca")}</span><span>${fmt(K.fosil_baca, 1)}</span></div>
+      <div class="line"><span>${t("biyojenik")}</span><span>${fmt(K.co2_bio, 1)}</span></div>
+      <div class="line"><span>${t("maliyet")}</span><span>${fmt(K.cost_top, 2)} €/MWh</span></div>
+      <div class="top3"><b>${t("enbuyuk")}:</b> ${ilk3}</div></div>`;
+  }).join("");
+  // nereden geliyor
+  document.querySelectorAll("#gorunum button").forEach(b => { b.classList.toggle("on", b.dataset.v === gorunum); b.textContent = t(b.dataset.v + "_g"); });
+  const gruplar = gorunum === "kaynak" ? GRUP_KARBON : GRUP_ASAMA;
+  cubuk("ch-karbon", "lg-karbon", S, gruplar, "em", gorunum === "kaynak" ? "g" : "a", "kg CO₂e", {
+    tikla: (i, g, ks, c) => {
+      secili = { i, g };
+      guncelle();
+      detayAc("detay", i, t(gorunum === "kaynak" ? "g" : "a")[g], ks, c);
+    },
+  });
+  // odak grafikleri
+  pareto(S[odak]);
+  kopru(ref, S[odak]);
+  tornado();
+  // para
+  paraBolumu(S);
+  cubuk("ch-maliyet", "lg-maliyet", S, GRUP_MALIYET, "cost", "c", "€/MWh", { d: 1 });
+  etsGrafik(S);
+  // tablolar
+  const bas = `<tr><th></th>${S.map(K => `<th class="n">${esc(K.ad)}</th>`).join("")}</tr>`;
+  const satir = (ad, f, d = 0) => `<tr><td>${ad}</td>${S.map(K => `<td class="n">${fmt(f(K), d)}</td>`).join("")}</tr>`;
+  document.getElementById("yillik").innerHTML = bas +
+    satir(t("buhar") + ", GWh", K => K.buhar_GWh) +
+    satir(t("yilt") + ", t CO₂e", K => K.yil_t) +
+    satir(t("yilm") + ", M€", K => K.yil_Meur, 2) +
+    satir(t("komurt") + ", t", K => K.komur_t_yil) +
+    satir(t("yongat") + ", t", K => K.yonga_t_yil);
+  document.getElementById("kalemler").innerHTML = bas +
+    Object.keys(KALEM).map(k => `<tr class="click" data-k="${k}"><td><i style="display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;background:var(${RENK_KALEM[k]})"></i>${kAd(k)}</td>${S.map(K => `<td class="n">${fmt(K.em[k], 2)}</td>`).join("")}</tr>`).join("") +
+    `<tr class="sum"><td>${t("toplam")}</td>${S.map(K => `<td class="n">${fmt(K.toplam, 2)}</td>`).join("")}</tr>`;
+  document.querySelectorAll("#kalemler tr.click").forEach(r => r.addEventListener("click", () => {
+    const k = r.dataset.k;
+    const i = S.reduce((bi, K, j) => K.em[k] > S[bi].em[k] ? j : bi, 0);
+    detayAc("detay2", i, kAd(k), [k], RENK_KALEM[k]);
+  }));
+  document.getElementById("kontrol").innerHTML = bas +
+    `<tr><td>${t("k_kutle")}</td>${S.map(K => `<td class="n ${Math.abs(K.m_diff) < 1e-6 ? "ok" : "warnc"}">${Math.abs(K.m_diff) < 1e-6 ? "0 ✓" : fmt(K.m_diff, 3)}</td>`).join("")}</tr>` +
+    satir(t("k_o2"), K => K.O2_dry_check, 2) +
+    satir(t("k_lam"), K => K.lambda_, 3) +
+    `<tr><td>${t("k_so2")}<br><span style="color:var(--muted);font-size:.8rem">${t("k_so2not")}</span></td>${S.map(K => `<td class="n ${K.SO2_mg > 30 ? "warnc" : "ok"}">${fmt(K.SO2_mg, 0)}</td>`).join("")}</tr>`;
+  kaydet();
+}
+
+// ---------------------------------------------------------------- PDF rapor (tarayıcının "PDF olarak kaydet" çıktısı)
+function raporOlustur() {
+  const R = hesapla(P, KZ), S = R.kazanlar;
+  const html = id => document.getElementById(id).innerHTML;
+  const kart = (baslik, govde) => `<div class="card blok"><h3>${baslik}</h3>${govde}</div>`;
+  const tarih = new Date().toLocaleDateString(dil === "tr" ? "tr-TR" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const kazanTablo = `<div class="wrap blok"><table><tr><th>${t("ad")}</th><th class="n">${t("komur")}</th><th class="n">${t("verim")}</th><th class="n">${t("kap")}, MW</th><th class="n">${t("saat")}</th><th>${t("kirec")}</th></tr>
+    ${KZ.map(k => `<tr><td>${esc(k.ad)}</td><td class="n">%${k.share_coal}</td><td class="n">${fmt(k.eta, 3)}</td><td class="n">${fmt(k.kap, 1)}</td><td class="n">${fmt(k.saat, 0)}</td><td>${k.kirectasi ? t("evet") : t("hayir")}</td></tr>`).join("")}</table></div>`;
+  const varsayim = GRUPLAR.map(g => {
+    const satir = g.p.filter(p => !["secenek", "turetilmis"].includes(p.tur) || p.k === "ulke" || p.k === "bio_sertifikali" || p.k === "n2o_mod" || p.k.startsWith("_")).map(p => {
+      const ad = p.tr.startsWith("__") ? t(p.tr.slice(2)) : p[dil];
+      let v;
+      if (p.k === "_n2o_used") v = fmt(R.ortak.n2oc, 0);
+      else if (p.k === "_LHV_ar") v = fmt(R.ortak.LHV_bio, 2);
+      else if (p.k === "_truck") v = fmt(R.ortak.tr * P.truck_km, 2);
+      else if (p.k === "ulke") v = ULKELER[P.ulke].ad[dil];
+      else if (typeof al(p.k) === "boolean") v = al(p.k) ? t("evet") : t("hayir");
+      else if (typeof al(p.k) === "string") v = t(al(p.k));
+      else v = fmt(+al(p.k), +al(p.k) < 1 ? 3 : 2);
+      const vs = p.k.startsWith("_") || typeof al(p.k) !== "number" ? null : (p.k.includes(".") ? VARSAYILAN[p.k.split(".")[0]][p.k.split(".")[1]] : VARSAYILAN[p.k]);
+      const degisti = vs !== null && vs !== undefined && Math.abs(+al(p.k) - vs) > 1e-9;
+      return `<tr><td>${ad}${p.onay ? ` <span class="onay">${t("onay")}</span>` : ""}${degisti ? ` <span class="onay" style="background:var(--warn-soft);color:var(--warn)">${t("r_degisen")}</span>` : ""}</td>
+        <td class="n">${v}</td><td>${p.u || ""}</td><td><span class="t t-${p.tur}">${t("turler")[p.tur]}</span></td><td style="color:var(--muted)">${p.kaynak}</td></tr>`;
+    }).join("");
+    return `<tr><th colspan="5">${g[dil]}</th></tr>${satir}`;
+  }).join("");
+  const el = document.getElementById("rapor");
+  el.innerHTML = `
+    <div class="kapak"><b style="font-size:1.1rem">CFB conversion: carbon and cost</b><div class="meta2" style="text-align:right">${t("hazirlayan")}<br><b style="color:var(--ink)">Emine Edis</b> · ${t("r_tarih")}: ${tarih}</div></div>
+    <h1>${t("r_baslik")}</h1>
+    <p class="meta2">${t("altbaslik")}</p>
+    <h2>${t("r_kapsam")}</h2><p>${t("r_kapsam_m")}</p>
+    <h2>${t("r_kazan")}</h2>${kazanTablo}
+    <h2>${t("r_sonuc")}</h2><div class="grid heroes blok">${html("heroes")}</div>
+    <h2>${t("r_nereden")}</h2>
+    ${kart(`${t("h_ayakizi")} · ${t(gorunum + "_g")}`, `<div class="legend">${html("lg-karbon")}</div>${html("ch-karbon")}`)}
+    <div class="sayfa"></div>
+    <h2>${t("r_odak")}: ${esc(KZ[odak].ad)}</h2>
+    <div class="grid cols2">${kart(t("h_pareto"), `<div class="pareto">${html("ch-pareto")}</div>`)}${kart(document.getElementById("h-kopru").textContent, `<div class="fall">${html("ch-kopru")}</div>`)}</div>
+    ${kart(t("h_tornado"), `<p class="csub">${t("s_tornado")}</p><div class="legend">${html("lg-tornado")}</div><div class="fall">${html("ch-tornado")}</div>`)}
+    <div class="sayfa"></div>
+    <h2>${t("r_para")}</h2>
+    <p class="meta2">${t("r_buhar")}: <b>${fmt(buhar, 0)} GWh</b></p>
+    <div class="grid save blok">${html("tasarruf")}</div>
+    <div class="grid cols2">${kart(t("h_yilmaliyet"), `<div class="legend">${html("lg-yil")}</div>${html("ch-yil")}`)}${kart(t("h_ets"), `<p class="csub">${esc(document.getElementById("ets-not").textContent)}</p><div class="legend">${html("lg-ets")}</div>${html("ch-ets")}`)}</div>
+    <h2>${t("r_kalem")}</h2><div class="wrap blok"><table>${html("kalemler")}</table></div>
+    <h2>${t("r_kontrol")}</h2><div class="wrap blok"><table>${html("kontrol")}</table></div>
+    <h2>${t("r_varsayim")}</h2><div class="wrap"><table class="ptable"><tr><th>${t("kalem")}</th><th class="n">${t("deger")}</th><th>${t("birimk")}</th><th>${t("tur")}</th><th>${t("kaynak")}</th></tr>${varsayim}</table></div>
+    <h2>${t("r_sinir")}</h2><div class="note blok"><ul>${t("eksik").map(x => `<li>${x}</li>`).join("")}</ul></div>
+    <p class="meta2" style="margin-top:14px">${t("dipnot")}</p>`;
+}
+
+function metinler() {
+  document.documentElement.lang = dil;
+  document.querySelectorAll("[data-i]").forEach(e => { e.textContent = t(e.dataset.i); });
+  document.getElementById("dil").textContent = dil === "tr" ? "EN" : "TR";
+  document.getElementById("eksik").innerHTML = `<ul>${t("eksik").map(x => `<li>${x}</li>`).join("")}</ul>`;
+}
+function hepsi() { metinler(); kazanKartlari(); odakListesi(); parametreler(); document.getElementById("detay").innerHTML = ""; document.getElementById("detay2").innerHTML = ""; secili = null; guncelle(); }
+
+document.getElementById("dil").addEventListener("click", () => { dil = dil === "tr" ? "en" : "tr"; hepsi(); });
+document.getElementById("pdf").addEventListener("click", () => {
+  raporOlustur();
+  const eski = document.title;
+  document.title = (dil === "tr" ? "Donusum_raporu_" : "Conversion_report_") + "Emine_Edis_" + new Date().toISOString().slice(0, 10);
+  window.print();
+  document.title = eski;
+});
+document.getElementById("sifirla").addEventListener("click", () => { P = kopya(VARSAYILAN); KZ = kopya(KAZANLAR); odak = 1; buhar = 795; hepsi(); });
+document.getElementById("ekle").addEventListener("click", () => {
+  const son = KZ[KZ.length - 1] || KAZANLAR[0];
+  KZ.push(Object.assign(kopya(son), { ad: `${t("yeni")} ${KZ.length + 1}` }));
+  kazanKartlari(); odakListesi(); guncelle();
+});
+document.getElementById("odak").addEventListener("change", e => { odak = +e.target.value; guncelle(); });
+document.getElementById("buhar").addEventListener("input", e => { buhar = +e.target.value; guncelle(); });
+document.querySelectorAll("#gorunum button").forEach(b => b.addEventListener("click", () => { gorunum = b.dataset.v; secili = null; document.getElementById("detay").innerHTML = ""; guncelle(); }));
+hepsi();
+if (location.hash === "#rapor") raporOlustur(); // doğrudan yazdırma ya da otomatik PDF üretimi için
+</script>
+</body>
+</html>
