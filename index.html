@@ -388,7 +388,7 @@ const T = {
     referans: "reference", toplam: "Total", birim: "kg CO₂e / MWh steam", fosilbaca: "Fossil CO₂ at the stack", biyojenik: "Biogenic CO₂ (reported separately)",
     maliyet: "Operating cost", azalma: "vs reference", enbuyuk: "Three largest sources",
     yilt: "Annual footprint", yilm: "Annual operating cost", buhar: "Annual steam", komurt: "Coal burned", yongat: "Chips purchased",
-    g: { baca: "Fossil CO₂ at the stack", n2o: "N₂O and CH₄ in the boiler", maden: "Coal mine methane", madencilik: "Mining and rail", yonga: "Chip harvest, haul, losses", sarf: "Power, consumables, start-up" },
+    g: { baca: "Fossil CO₂ at the stack", n2o: "N₂O and CH₄ in the boiler", maden: "Coal mine methane", fi: "Kaivosmetaani", madencilik: "Mining and rail", yonga: "Chip harvest, haul, losses", sarf: "Power, consumables, start-up" },
     a: { cikarma: "Fuel extraction", tasima: "Transport", depo: "Storage losses", kazan: "Boiler (combustion)", girdi: "Operating inputs" },
     c: { yakit: "Fuel", kayip: "Chips lost in storage", ets: "EU ETS", elektrik: "Auxiliary power", sarf: "Limestone, ammonia, sand, oil" },
     nerede: "Where", neden: "Why", formul: "Calculation", kaynak: "Source", asama: "Stage", payi: "share of total",
@@ -401,25 +401,73 @@ const T = {
     n2omod: "How to set the coal N₂O factor", sicaklik: "from bed temperature", elle: "manual", sertifika: "Biomass meets sustainability criteria (zero under ETS)", evet: "yes", hayir: "no",
     malztasima: "Include sand and limestone haulage", kamyon: "truck", tren: "rail",
   },
+  fi: {
+    hazirlayan: "Sumitomo SHI FW:n harjoittelijahaastattelua varten laatinut",
+    pdf: "Lataa PDF-raportti", r_baslik: "Muunnoksen hiili- ja kustannusraportti", r_tarih: "Raportin päivämäärä", r_kapsam: "1. Tavoite ja rajaus",
+    r_kapsam_m: "Tämä raportti vertaa saman CFB-kattilan hiilijalanjälkeä ja käyttökustannuksia eri polttoaineseoksilla. Menetelmä noudattaa ISO 14040/14044 -elinkaariarviointia. Toiminnallinen yksikkö on 1 MWh höyryyn siirrettyä lämpöä. Järjestelmäraja ulottuu kehdosta kattilan höyrynlähtöön: hiilikaivos ja metsä ovat mukana, turbiini ja rakentaminen eivät. Kasvihuonekaasut muunnetaan CO₂e:ksi IPCC AR6 GWP100 -kertoimilla. Biogeeninen CO₂ raportoidaan omalla rivillään.",
+    r_kazan: "2. Vertaillut kattilat", r_sonuc: "3. Tulos", r_nereden: "4. Mistä päästöt tulevat", r_odak: "5. Tarkasteltava kattila", r_para: "6. Kustannukset", r_kalem: "7. Kaikki päästöerät",
+    r_varsayim: "8. Oletukset ja lähteet", r_kontrol: "9. Tarkistukset", r_sinir: "10. Rajoitukset",
+    r_degisen: "muutettu oletusarvosta", r_buhar: "Vertailussa käytetty vuotuinen höyry",
+    baslik: "Hiilestä biomassaan: hiili- ja kustannustyökalu",
+    altbaslik: "Vertaa CFB-kattiloiden hiilijalanjälkeä (kaivokselta ja metsästä höyrynlähtöön) ja käyttökustannuksia rinnakkain. Toiminnallinen yksikkö: 1 MWh höyryyn siirrettyä lämpöä. Tapaus: Fortum Częstochowa, julkisin tiedoin.",
+    sifirla: "Palauta oletukset", ekle: "+ Lisää kattila",
+    h_kazanlar: "Kattilat", h_sonuc: "Tulos",
+    h_nereden: "Mistä päästöt tulevat?",
+    s_nereden: "Kunkin kattilan jalanjälki lähteittäin. Napsauta osaa, niin näet missä päästö syntyy, miksi, miten se lasketaan ja mikä on sen lähde.",
+    h_ayakizi: "Hiilijalanjälki, kg CO₂e / MWh höyryä", kaynak_g: "Lähteittäin", asama_g: "Elinkaaren vaiheittain",
+    ipucu: "Vinkki: napsauta värillistä osaa.",
+    odak: "Tarkasteltava kattila:",
+    h_pareto: "Suurimmat lähteet", s_pareto: "Erät suurimmasta pienimpään ja niiden osuus kokonaisuudesta. Napsauta nähdäksesi tiedot.",
+    h_kopru: "Siltakaavio", s_kopru: "Miten kukin erä muuttuu vertailukattilasta tähän kattilaan. Vihreä on vähennys, punainen lisäys.",
+    h_tornado: "Mikä oletus vaikuttaa tulokseen eniten?", s_tornado: "Kukin oletus viedään vuorollaan uskottavan vaihteluvälinsä molempiin päihin muiden pysyessä ennallaan. Ylin vaikuttaa tulokseen eniten.",
+    alt_uc: "vaihteluvälin vähäpäästöinen pää", ust_uc: "vaihteluvälin runsaspäästöinen pää",
+    h_para: "Raha: sama höyry, eri lasku",
+    s_para: "Valitse vuotuinen höyryntuotanto. Kaikkia kattiloita verrataan ikään kuin ne tuottaisivat saman määrän höyryä.",
+    buharsec: "Vuotuinen höyryntuotanto", buharnot: "Częstochowa muunnoksen jälkeen ≈ 795 GWh",
+    h_yilmaliyet: "Vuotuiset käyttökustannukset, M€", h_yilkarbon: "Vuotuinen jalanjälki, kt CO₂e",
+    h_maliyet: "Käyttökustannus, € / MWh höyryä",
+    h_ets: "Jos päästöoikeuden hinta muuttuu", ets_kesisim: "Tämä kattila on vertailukattilaa edullisempi, kun ETS-hinta ylittää {x} €/t.", ets_hep: "Tämä kattila on vertailukattilaa edullisempi kaikilla ETS-hinnoilla.", ets_hic: "Tämä kattila ei ole vertailukattilaa edullisempi ETS-hinnoilla 0–200 €/t.", ets_bugun: "tänään",
+    tas_yil: "vuotuinen kustannusero", tas_gun: "päivittäinen kustannusero", tas_co2: "vuotuinen hiiliero", tas_ets: "vuotuisen ETS-laskun ero", tas_yakit: "vuotuinen polttoaine",
+    ucuz: "edullisempi", pahali: "kalliimpi", az: "vähemmän", fazla: "enemmän",
+    h_yillik: "Kattiloiden omat vuosiarvot", h_kalemler: "Kaikki päästöerät, kg CO₂e / MWh höyryä",
+    s_kalemler: "Napsauta riviä, niin erän selitys avautuu.",
+    h_kontrol: "Tarkistukset", h_param: "Parametrit", h_eksik: "Huomioita rajauksesta",
+    ad: "Nimi", komur: "Hiilen osuus (lämpö)", verim: "Kattilan hyötysuhde", kap: "Höyryyn siirretty lämpö", saat: "Huipunkäyttöaika", kirec: "Rikinpoisto kalkkikivellä",
+    referans: "vertailu", toplam: "Yhteensä", birim: "kg CO₂e / MWh höyryä", fosilbaca: "Fossiilinen CO₂ piipussa", biyojenik: "Biogeeninen CO₂ (raportoidaan erikseen)",
+    maliyet: "Käyttökustannus", azalma: "vs. vertailu", enbuyuk: "Kolme suurinta lähdettä",
+    yilt: "Vuotuinen jalanjälki", yilm: "Vuotuinen käyttökustannus", buhar: "Vuotuinen höyry", komurt: "Poltettu hiili", yongat: "Ostettu hake",
+    g: { baca: "Fossiilinen CO₂ piipussa", n2o: "N₂O ja CH₄ kattilassa", maden: "Kaivosmetaani", madencilik: "Kaivostoiminta ja rautatie", yonga: "Hakkeen korjuu, kuljetus, hävikki", sarf: "Sähkö, tarvikkeet, käynnistys" },
+    a: { cikarma: "Polttoaineen hankinta", tasima: "Kuljetus", depo: "Varastohävikki", kazan: "Kattila (palaminen)", girdi: "Käytön panokset" },
+    c: { yakit: "Polttoaine", kayip: "Varastossa hävinnyt hake", ets: "EU:n päästökauppa", elektrik: "Omakäyttösähkö", sarf: "Kalkkikivi, ammoniakki, hiekka, öljy" },
+    nerede: "Missä", neden: "Miksi", formul: "Laskenta", kaynak: "Lähde", asama: "Vaihe", payi: "osuus kokonaisuudesta",
+    k_kutle: "Massatase: sisään − ulos, kg", k_o2: "O₂ kuivissa savukaasuissa, %", k_lam: "Ilmakerroin λ", k_so2: "SO₂ piipussa, mg/Nm³ (6 % O₂)", k_so2not: "Sumitomon takuu 30; puun tuhkan kalsiumia ei ole laskettu",
+    kalem: "Erä", tur: "Tyyppi", deger: "Arvo", birimk: "Yksikkö",
+    turler: { sabit: "vakio", girdi: "syöte, oletusarvo", secenek: "valinta", kaydirici: "liukusäädin", turetilmis: "johdettu" },
+    onay: "odottaa tarkistusta", sil: "Poista kattila", yeni: "Uusi kattila", kapat: "Sulje",
+    eksik: ["Jätteisiin käytetään cut-off-menetelmää: tuhka ja käytetty hiekka poistuvat rajauksesta lähtiessään kattilasta. Kierrätyshyvitystä ei anneta, joten mitään säästöä ei lasketa kahteen kertaan.", "Hiekan ja kalkkikiven kuljetus on valinnainen (Parametrit, G). Se on oletuksena pois päältä, ja päälle kytkettynä voi valita kulkuneuvon ja matkan.", "Kapasiteetti syötetään kattilakohtaisesti, joten muunnoksen aiheuttama kapasiteettimuutos näkyy kattilakorteissa.", "Kustannuksissa ei vielä ole hiilen kuljetusta, tuhkan käsittelymaksuja eikä kunnossapitoa. Tarvikkeiden hinnat ovat toimitettuja ja verottomia, ja ne perustuvat vuosien 2023–2026 puolalaisiin tarjouskilpailuihin ja virallisiin tietoihin."],
+    dipnot: "Laatinut Emine Edis · Kaikki oletusarvot perustuvat laskentaraportin (05_hesaplama_dokumani, versio 2) lähteisiin ja toistavat sen luvut. Ei Sumitomo SHI FW:n virallinen työkalu, vaan julkisiin tietoihin perustuva itsenäinen selvitys. Luonnos · marraskuu 2026",
+    n2omod: "Hiilen N₂O-kertoimen asetustapa", sicaklik: "petilämpötilasta", elle: "käsin", sertifika: "Biomassa täyttää kestävyyskriteerit (nolla päästökaupassa)", evet: "kyllä", hayir: "ei",
+    malztasima: "Huomioi hiekan ja kalkkikiven kuljetus", kamyon: "kuorma-auto", tren: "juna",
+  },
 };
 
 // ---------------------------------------------------------------- her emisyon kaleminin açıklaması
 const KALEM = {
-  coal_co2: { asama: "kazan", tr: ["Kömürün yanma CO₂'si", "Kazanın bacası", "Kömürdeki fosil karbon yanınca CO₂ olur. Milyonlarca yıl yer altında kalmış karbon havaya eklenir.", "kömür enerjisi (GJ) × 93,89 kg CO₂/GJ"], en: ["Coal combustion CO₂", "Boiler stack", "Fossil carbon in coal turns into CO₂ when it burns, adding carbon stored underground for millions of years.", "coal energy (GJ) × 93.89 kg CO₂/GJ"], src: "KOBiZE 2026, Tablo 1" },
-  calc: { asama: "kazan", tr: ["Kireçtaşı kalsinasyonu", "Ocak, kükürt tutma", "Kükürdü tutmak için atılan kireçtaşı ısınınca parçalanır: CaCO₃ → CaO + CO₂. Bu CO₂ kayadan geldiği için fosil.", "CaCO₃ kütlesi × 44/100 (+ MgCO₃ payı)"], en: ["Limestone calcination", "Furnace, sulphur capture", "Limestone fed to capture sulphur breaks down when heated: CaCO₃ → CaO + CO₂. This CO₂ comes from rock, so it is fossil.", "CaCO₃ mass × 44/100 (+ MgCO₃ share)"], src: "Xu 2024, Tablo 1, s.20057" },
-  n2o: { asama: "kazan", tr: ["Kazanda N₂O", "Ocak, 850–900 °C", "Yakıttaki azot CFB'nin serin yatağında kısmen N₂O'ya döner. Sıcaklık arttıkça N₂O parçalanır, bu yüzden faktör yatak sıcaklığına bağlı.", "yakıt enerjisi × N₂O faktörü (kg/TJ) × 273"], en: ["Boiler N₂O", "Furnace, 850–900 °C", "Fuel nitrogen partly turns into N₂O in the cool CFB bed. N₂O breaks down as temperature rises, so the factor depends on bed temperature.", "fuel energy × N₂O factor (kg/TJ) × 273"], src: "Tsupari 2007, Tablo 6, Şekil 4; IPCC 2006 Cilt 2 Tablo 2.6" },
-  ch4: { asama: "kazan", tr: ["Kazanda CH₄", "Ocak", "Yanma bir an eksik kalınca az miktarda yanmamış metan kaçar.", "yakıt enerjisi × CH₄ faktörü × 29,8 (fosil) ya da 27,0 (biyojenik)"], en: ["Boiler CH₄", "Furnace", "When combustion is momentarily incomplete, a little unburnt methane escapes.", "fuel energy × CH₄ factor × 29.8 (fossil) or 27.0 (biogenic)"], src: "Tsupari 2007, Tablo 3 ve 6" },
-  mine_ch4: { asama: "cikarma", tr: ["Maden metanı", "Polonya taş kömürü madenleri", "Kömür damarında hapsolmuş metan, kazı sırasında havalandırma kuyularından atmosfere salınır. Bacada hiç görünmez.", "t kömür × 9,77 kg CH₄/t × 29,8"], en: ["Coal mine methane", "Polish hard coal mines", "Methane trapped in the coal seam is vented to the atmosphere during mining. It never shows up at the stack.", "t coal × 9.77 kg CH₄/t × 29.8"], src: "NID 2026, Tablo 3.3.1 ve 3.3.2" },
-  mining_co2: { asama: "cikarma", tr: ["Madencilik (metan dışı)", "Maden ve kömür hazırlama tesisi", "Madenin elektriği, yakıtları ve kömürün yıkanıp hazırlanması.", "kömür enerjisi (MJ) × 2,64 g CO₂e/MJ"], en: ["Mining (non-methane)", "Mine and coal preparation plant", "Electricity and fuels used at the mine, plus washing and preparing the coal.", "coal energy (MJ) × 2.64 g CO₂e/MJ"], src: "GUS 2025 Tabl. 3(29); Lewandowska 2025" },
-  train: { asama: "tasima", tr: ["Kömür treni", "Madenden santrale demiryolu", "Kömür trenle taşınır. Polonya demiryolu büyük ölçüde elektrikli.", "t kömür × km × 18,5 g/t·km"], en: ["Coal train", "Rail from mine to plant", "Coal travels by rail, largely electrified in Poland.", "t coal × km × 18.5 g/t·km"], src: "PKP Cargo 2022, s.49" },
-  harvest: { asama: "cikarma", tr: ["Hasat ve yongalama", "Orman", "Orman artıklarını toplayan makineler ve yongalayıcının dizeli.", "yonga enerjisi (MJ) × 1,6 g CO₂e/MJ"], en: ["Harvest and chipping", "Forest", "Diesel used by forwarders and the chipper.", "chip energy (MJ) × 1.6 g CO₂e/MJ"], src: "JRC 2017, Tablo 91" },
-  truck: { asama: "tasima", tr: ["Yonga kamyonu", "Ormandan santrale yol", "Nemli yonga kamyonla taşınır, boş dönüş dahil. Yonganın yarısı su olduğu için taşınan her ton daha az enerji taşır.", "t yonga × km × 0,040 L/t·km × dizel faktörü"], en: ["Chip truck", "Road from forest to plant", "Moist chips travel by truck, empty return included. Half of each tonne is water, so each tonne carries less energy.", "t chips × km × 0.040 L/t·km × diesel factor"], src: "Kühmaier 2022 Ek A.4; Gendek & Nurek 2016; JRC 2017 Tablo 6" },
-  dm_loss: { asama: "depo", tr: ["Kuru madde kaybının telafisi", "Yonga yığını", "Yığında mikroplar odunu yavaş yavaş yer. Aynı enerji için ormandan daha fazla yonga toplanıp taşınır.", "(hasat + kamyon) × kayıp / (1 − kayıp)"], en: ["Make-up for dry-matter loss", "Chip pile", "Microbes slowly consume wood in the pile, so more chips must be harvested and hauled for the same energy.", "(harvest + truck) × loss / (1 − loss)"], src: "Wihersaari 2005b, s.446" },
-  aux: { asama: "girdi", tr: ["Yardımcı elektrik", "Polonya elektrik şebekesi", "Fanlar, yakıt besleme ve kül sistemi şebekeden elektrik çeker. Polonya şebekesi kömür ağırlıklı.", "kWh × 0,641 kg CO₂e/kWh"], en: ["Auxiliary power", "Polish grid", "Fans, fuel feeding and the ash system draw grid power. The Polish grid is coal-heavy.", "kWh × 0.641 kg CO₂e/kWh"], src: "Lockwood 2013 Tablo 5; Lewandowska 2025 Tablo 15" },
-  nh3: { asama: "girdi", tr: ["Amonyak üretimi", "Amonyak fabrikası", "NOx'u temizleyen SNCR için kullanılan amonyak doğalgazdan üretilir.", "kg NH₃ × 2,4 kg CO₂/kg"], en: ["Ammonia production", "Ammonia plant", "Ammonia for NOx removal (SNCR) is made from natural gas.", "kg NH₃ × 2.4 kg CO₂/kg"], src: "Mahmoudi 2010; JRC amonyak notu 2026" },
-  sand_lime: { asama: "girdi", tr: ["Kum ve kireçtaşı üretimi", "Taş ocağı", "Yatak kumu ve kireçtaşı kazılıp kırılır.", "kg × 4,5 kg CO₂e/t"], en: ["Sand and limestone production", "Quarry", "Bed sand and limestone are quarried and crushed.", "kg × 4.5 kg CO₂e/t"], src: "Kırma taş EPD'leri; Leckner & Lind 2020" },
-  malz_tasima: { asama: "tasima", tr: ["Kum ve kireçtaşı taşıması", "Taş ocağından santrale", "Yatak kumu ve kireçtaşı tesise kamyonla ya da trenle getirilir. Seçenek: varsayılan kapalı.", "t × km × araç faktörü (kamyon 96,3 · tren 18,5 g/t·km)"], en: ["Sand and limestone haulage", "Quarry to plant", "Bed sand and limestone are brought to the plant by truck or rail. Option: off by default.", "t × km × vehicle factor (truck 96.3 · rail 18.5 g/t·km)"], src: "DESNZ 2026; PKP Cargo 2022 s.49" },
-  startup: { asama: "girdi", tr: ["İlk yakma yağı", "Kazan brülörleri", "Kazan durup yeniden kalkarken kumu ısıtmak için hafif yakıt yağı yakılır.", "yakıt enerjisinin %0,25–0,3'ü × yağ faktörü"], en: ["Start-up oil", "Boiler burners", "Light fuel oil heats the bed when the boiler restarts.", "0.25–0.3% of fuel energy × oil factor"], src: "Laanila, Johannes, Kauttua raporları; DESNZ 2026" },
+  coal_co2: { asama: "kazan", tr: ["Kömürün yanma CO₂'si", "Kazanın bacası", "Kömürdeki fosil karbon yanınca CO₂ olur. Milyonlarca yıl yer altında kalmış karbon havaya eklenir.", "kömür enerjisi (GJ) × 93,89 kg CO₂/GJ"], en: ["Coal combustion CO₂", "Boiler stack", "Fossil carbon in coal turns into CO₂ when it burns, adding carbon stored underground for millions of years.", "coal energy (GJ) × 93.89 kg CO₂/GJ"], fi: ["Hiilen palamisen CO₂", "Kattilan piippu", "Hiilen fossiilinen hiili muuttuu palaessaan CO₂:ksi. Ilmakehään lisätään hiiltä, joka on ollut maan alla miljoonia vuosia.", "hiilen energia (GJ) × 93,89 kg CO₂/GJ"], src: "KOBiZE 2026, Tablo 1" },
+  calc: { asama: "kazan", tr: ["Kireçtaşı kalsinasyonu", "Ocak, kükürt tutma", "Kükürdü tutmak için atılan kireçtaşı ısınınca parçalanır: CaCO₃ → CaO + CO₂. Bu CO₂ kayadan geldiği için fosil.", "CaCO₃ kütlesi × 44/100 (+ MgCO₃ payı)"], en: ["Limestone calcination", "Furnace, sulphur capture", "Limestone fed to capture sulphur breaks down when heated: CaCO₃ → CaO + CO₂. This CO₂ comes from rock, so it is fossil.", "CaCO₃ mass × 44/100 (+ MgCO₃ share)"], fi: ["Kalkkikiven kalsinointi", "Tulipesä, rikinpoisto", "Rikin sitomiseen syötetty kalkkikivi hajoaa kuumetessaan: CaCO₃ → CaO + CO₂. Tämä CO₂ tulee kivestä, joten se on fossiilista.", "CaCO₃:n massa × 44/100 (+ MgCO₃:n osuus)"], src: "Xu 2024, Tablo 1, s.20057" },
+  n2o: { asama: "kazan", tr: ["Kazanda N₂O", "Ocak, 850–900 °C", "Yakıttaki azot CFB'nin serin yatağında kısmen N₂O'ya döner. Sıcaklık arttıkça N₂O parçalanır, bu yüzden faktör yatak sıcaklığına bağlı.", "yakıt enerjisi × N₂O faktörü (kg/TJ) × 273"], en: ["Boiler N₂O", "Furnace, 850–900 °C", "Fuel nitrogen partly turns into N₂O in the cool CFB bed. N₂O breaks down as temperature rises, so the factor depends on bed temperature.", "fuel energy × N₂O factor (kg/TJ) × 273"], fi: ["Kattilan N₂O", "Tulipesä, 850–900 °C", "Polttoaineen typpi muuttuu osittain N₂O:ksi CFB:n viileässä petissä. N₂O hajoaa lämpötilan noustessa, joten kerroin riippuu petilämpötilasta.", "polttoaineen energia × N₂O-kerroin (kg/TJ) × 273"], src: "Tsupari 2007, Tablo 6, Şekil 4; IPCC 2006 Cilt 2 Tablo 2.6" },
+  ch4: { asama: "kazan", tr: ["Kazanda CH₄", "Ocak", "Yanma bir an eksik kalınca az miktarda yanmamış metan kaçar.", "yakıt enerjisi × CH₄ faktörü × 29,8 (fosil) ya da 27,0 (biyojenik)"], en: ["Boiler CH₄", "Furnace", "When combustion is momentarily incomplete, a little unburnt methane escapes.", "fuel energy × CH₄ factor × 29.8 (fossil) or 27.0 (biogenic)"], fi: ["Kattilan CH₄", "Tulipesä", "Kun palaminen on hetkellisesti epätäydellistä, pieni määrä palamatonta metaania pääsee ulos.", "polttoaineen energia × CH₄-kerroin × 29,8 (fossiilinen) tai 27,0 (biogeeninen)"], src: "Tsupari 2007, Tablo 3 ve 6" },
+  mine_ch4: { asama: "cikarma", tr: ["Maden metanı", "Polonya taş kömürü madenleri", "Kömür damarında hapsolmuş metan, kazı sırasında havalandırma kuyularından atmosfere salınır. Bacada hiç görünmez.", "t kömür × 9,77 kg CH₄/t × 29,8"], en: ["Coal mine methane", "Polish hard coal mines", "Methane trapped in the coal seam is vented to the atmosphere during mining. It never shows up at the stack.", "t coal × 9.77 kg CH₄/t × 29.8"], fi: ["Kaivosmetaani", "Puolan kivihiilikaivokset", "Hiilisaumaan sitoutunut metaani vapautuu louhinnan aikana ilmakehään. Se ei koskaan näy piipussa.", "t hiiltä × 9,77 kg CH₄/t × 29,8"], src: "NID 2026, Tablo 3.3.1 ve 3.3.2" },
+  mining_co2: { asama: "cikarma", tr: ["Madencilik (metan dışı)", "Maden ve kömür hazırlama tesisi", "Madenin elektriği, yakıtları ve kömürün yıkanıp hazırlanması.", "kömür enerjisi (MJ) × 2,64 g CO₂e/MJ"], en: ["Mining (non-methane)", "Mine and coal preparation plant", "Electricity and fuels used at the mine, plus washing and preparing the coal.", "coal energy (MJ) × 2.64 g CO₂e/MJ"], fi: ["Kaivostoiminta (ei metaani)", "Kaivos ja hiilen rikastamo", "Kaivoksen sähkö ja polttoaineet sekä hiilen pesu ja käsittely.", "hiilen energia (MJ) × 2,64 g CO₂e/MJ"], src: "GUS 2025 Tabl. 3(29); Lewandowska 2025" },
+  train: { asama: "tasima", tr: ["Kömür treni", "Madenden santrale demiryolu", "Kömür trenle taşınır. Polonya demiryolu büyük ölçüde elektrikli.", "t kömür × km × 18,5 g/t·km"], en: ["Coal train", "Rail from mine to plant", "Coal travels by rail, largely electrified in Poland.", "t coal × km × 18.5 g/t·km"], fi: ["Hiilijuna", "Rautatie kaivokselta voimalaitokselle", "Hiili kuljetetaan junalla. Puolan rautatiet ovat pääosin sähköistettyjä.", "t hiiltä × km × 18,5 g/t·km"], src: "PKP Cargo 2022, s.49" },
+  harvest: { asama: "cikarma", tr: ["Hasat ve yongalama", "Orman", "Orman artıklarını toplayan makineler ve yongalayıcının dizeli.", "yonga enerjisi (MJ) × 1,6 g CO₂e/MJ"], en: ["Harvest and chipping", "Forest", "Diesel used by forwarders and the chipper.", "chip energy (MJ) × 1.6 g CO₂e/MJ"], fi: ["Korjuu ja haketus", "Metsä", "Metsäkoneiden ja hakkurin käyttämä diesel.", "hakkeen energia (MJ) × 1,6 g CO₂e/MJ"], src: "JRC 2017, Tablo 91" },
+  truck: { asama: "tasima", tr: ["Yonga kamyonu", "Ormandan santrale yol", "Nemli yonga kamyonla taşınır, boş dönüş dahil. Yonganın yarısı su olduğu için taşınan her ton daha az enerji taşır.", "t yonga × km × 0,040 L/t·km × dizel faktörü"], en: ["Chip truck", "Road from forest to plant", "Moist chips travel by truck, empty return included. Half of each tonne is water, so each tonne carries less energy.", "t chips × km × 0.040 L/t·km × diesel factor"], fi: ["Hakeauto", "Tie metsästä voimalaitokselle", "Kostea hake kuljetetaan kuorma-autolla, tyhjä paluumatka mukaan lukien. Puolet jokaisesta tonnista on vettä, joten tonni sisältää vähemmän energiaa.", "t haketta × km × 0,040 l/t·km × dieselin kerroin"], src: "Kühmaier 2022 Ek A.4; Gendek & Nurek 2016; JRC 2017 Tablo 6" },
+  dm_loss: { asama: "depo", tr: ["Kuru madde kaybının telafisi", "Yonga yığını", "Yığında mikroplar odunu yavaş yavaş yer. Aynı enerji için ormandan daha fazla yonga toplanıp taşınır.", "(hasat + kamyon) × kayıp / (1 − kayıp)"], en: ["Make-up for dry-matter loss", "Chip pile", "Microbes slowly consume wood in the pile, so more chips must be harvested and hauled for the same energy.", "(harvest + truck) × loss / (1 − loss)"], fi: ["Kuiva-ainehävikin korvaus", "Hakekasa", "Mikrobit kuluttavat puuta hitaasti kasassa, joten samaan energiaan tarvitaan enemmän korjattua ja kuljetettua haketta.", "(korjuu + kuljetus) × hävikki / (1 − hävikki)"], src: "Wihersaari 2005b, s.446" },
+  aux: { asama: "girdi", tr: ["Yardımcı elektrik", "Polonya elektrik şebekesi", "Fanlar, yakıt besleme ve kül sistemi şebekeden elektrik çeker. Polonya şebekesi kömür ağırlıklı.", "kWh × 0,641 kg CO₂e/kWh"], en: ["Auxiliary power", "Polish grid", "Fans, fuel feeding and the ash system draw grid power. The Polish grid is coal-heavy.", "kWh × 0.641 kg CO₂e/kWh"], fi: ["Omakäyttösähkö", "Puolan sähköverkko", "Puhaltimet, polttoaineen syöttö ja tuhkajärjestelmä käyttävät verkkosähköä. Puolan sähkö tuotetaan pääosin hiilellä.", "kWh × 0,641 kg CO₂e/kWh"], src: "Lockwood 2013 Tablo 5; Lewandowska 2025 Tablo 15" },
+  nh3: { asama: "girdi", tr: ["Amonyak üretimi", "Amonyak fabrikası", "NOx'u temizleyen SNCR için kullanılan amonyak doğalgazdan üretilir.", "kg NH₃ × 2,4 kg CO₂/kg"], en: ["Ammonia production", "Ammonia plant", "Ammonia for NOx removal (SNCR) is made from natural gas.", "kg NH₃ × 2.4 kg CO₂/kg"], fi: ["Ammoniakin tuotanto", "Ammoniakkitehdas", "Typenoksidien poistoon (SNCR) käytettävä ammoniakki valmistetaan maakaasusta.", "kg NH₃ × 2,4 kg CO₂/kg"], src: "Mahmoudi 2010; JRC amonyak notu 2026" },
+  sand_lime: { asama: "girdi", tr: ["Kum ve kireçtaşı üretimi", "Taş ocağı", "Yatak kumu ve kireçtaşı kazılıp kırılır.", "kg × 4,5 kg CO₂e/t"], en: ["Sand and limestone production", "Quarry", "Bed sand and limestone are quarried and crushed.", "kg × 4.5 kg CO₂e/t"], fi: ["Hiekan ja kalkkikiven tuotanto", "Louhos", "Petihiekka ja kalkkikivi louhitaan ja murskataan.", "kg × 4,5 kg CO₂e/t"], src: "Kırma taş EPD'leri; Leckner & Lind 2020" },
+  malz_tasima: { asama: "tasima", tr: ["Kum ve kireçtaşı taşıması", "Taş ocağından santrale", "Yatak kumu ve kireçtaşı tesise kamyonla ya da trenle getirilir. Seçenek: varsayılan kapalı.", "t × km × araç faktörü (kamyon 96,3 · tren 18,5 g/t·km)"], en: ["Sand and limestone haulage", "Quarry to plant", "Bed sand and limestone are brought to the plant by truck or rail. Option: off by default.", "t × km × vehicle factor (truck 96.3 · rail 18.5 g/t·km)"], fi: ["Hiekan ja kalkkikiven kuljetus", "Louhokselta voimalaitokselle", "Petihiekka ja kalkkikivi tuodaan laitokselle kuorma-autolla tai junalla. Valinnainen, oletuksena pois päältä.", "t × km × kulkuneuvon kerroin (kuorma-auto 96,3 · juna 18,5 g/t·km)"], src: "DESNZ 2026; PKP Cargo 2022 s.49" },
+  startup: { asama: "girdi", tr: ["İlk yakma yağı", "Kazan brülörleri", "Kazan durup yeniden kalkarken kumu ısıtmak için hafif yakıt yağı yakılır.", "yakıt enerjisinin %0,25–0,3'ü × yağ faktörü"], en: ["Start-up oil", "Boiler burners", "Light fuel oil heats the bed when the boiler restarts.", "0.25–0.3% of fuel energy × oil factor"], fi: ["Käynnistysöljy", "Kattilan polttimet", "Kevyt polttoöljy lämmittää petin, kun kattila käynnistetään uudelleen.", "0,25–0,3 % polttoaineen energiasta × öljyn kerroin"], src: "Laanila, Johannes, Kauttua raporları; DESNZ 2026" },
 };
 const GRUP_KARBON = [
   ["baca", ["coal_co2", "calc"], "--s1"],
@@ -437,6 +485,7 @@ GRUP_KARBON.forEach(([, ks, c]) => ks.forEach(k => { RENK_KALEM[k] = c; }));
 const KAZAN_RENK = ["--s1", "--s2", "--s3", "--s4", "--s5", "--s6", "--s7", "--s8"];
 
 // ---------------------------------------------------------------- duyarlılık aralıkları (hesap.py TOR listesi)
+const TOR_FI = {"n2o":"Hiilen N₂O-kerroin","eta":"Kattilan hyötysuhde","mine_ch4":"Kaivosmetaani","mining_co2":"Kaivostoiminnan CO₂","train_km":"Rautatiematka","grid":"Verkkosähkö","aux_coal":"Omakäyttösähkö, hiili","aux_bio":"Omakäyttösähkö, biomassa","truck_km":"Kuljetusmatka autolla","harvest":"Korjuu ja haketus","dm_rate":"Kuiva-ainehävikin nopeus","dm_months":"Varastointiaika","n2o_bio":"Puun N₂O-kerroin","ch4_bio":"Puun CH₄-kerroin","CaS":"Ca/S-suhde","coalS":"Hiilen rikki","nh3w":"Ammoniakkivesi","sand":"Petihiekka","M_bio":"Hakkeen kosteus"};
 const TOR = [
   ["n2o", "Kömür N₂O faktörü", "Coal N₂O factor", p => { p.n2o_mod = "elle"; p.n2o_coal_elle = 30; }, p => { p.n2o_mod = "elle"; p.n2o_coal_elle = 61; }],
   ["eta", "Kazan verimi", "Boiler efficiency", null, null],
@@ -461,74 +510,74 @@ const TOR = [
 
 // ---------------------------------------------------------------- parametre tanımları
 const GRUPLAR = [
-  { tr: "A. Ülke profili", en: "A. Country profile", p: [
-    { k: "ulke", tur: "secenek", tr: "Ülke", en: "Country", sec: Object.keys(ULKELER), kaynak: "Finlandiya ve diğerleri resmi kaynaklarla eklenecek / Finland and others to be added from official sources" },
-    { k: "grid", tur: "girdi", tr: "Şebeke elektriği ayak izi", en: "Grid electricity footprint", u: "kg CO₂e/kWh", st: 0.001, onay: 1, kaynak: "Lewandowska 2025, Tablo 15" },
-    { k: "mine_ch4", tur: "girdi", tr: "Maden metanı", en: "Coal mine methane", u: "kg CH₄/t", st: 0.01, kaynak: "NID 2026, Tablo 3.3.1–3.3.2" },
-    { k: "mining_co2", tur: "girdi", tr: "Madencilik CO₂ (metan dışı)", en: "Mining CO₂ (non-methane)", u: "g CO₂e/MJ", st: 0.01, onay: 1, kaynak: "GUS 2025 + Lewandowska 2025" },
-    { k: "train_ef", tur: "girdi", tr: "Tren emisyon faktörü", en: "Rail emission factor", u: "g CO₂e/t·km", st: 0.1, kaynak: "PKP Cargo 2022, s.49" },
-    { k: "LHV_coal", tur: "girdi", tr: "Kömür ısıl değeri", en: "Coal heating value", u: "MJ/kg", st: 0.01, kaynak: "KOBiZE 2026, Tablo 1" },
-    { k: "EF_coal", tur: "girdi", tr: "Kömür yanma CO₂ faktörü", en: "Coal combustion CO₂ factor", u: "kg CO₂/GJ", st: 0.01, kaynak: "KOBiZE 2026, Tablo 1" },
-    { k: "eurpln", tur: "girdi", tr: "Döviz kuru", en: "Exchange rate", u: "PLN/€", st: 0.001, kaynak: "NBP Tablo A, 28.10.2026" },
-    { k: "p_coal", tur: "girdi", tr: "Kömür fiyatı", en: "Coal price", u: "PLN/GJ", st: 0.01, kaynak: "ARP/TGE PSCMI1" },
-    { k: "p_bio", tur: "girdi", tr: "Yonga fiyatı", en: "Wood chip price", u: "PLN/GJ", st: 0.01, kaynak: "URE 2025, Tablo 4" },
-    { k: "p_el", tur: "girdi", tr: "Elektrik fiyatı", en: "Electricity price", u: "PLN/MWh", st: 0.1, kaynak: "TGE 2025" },
+  { tr: "A. Ülke profili", en: "A. Country profile", fi: "A. Maaprofiili", p: [
+    { k: "ulke", tur: "secenek", tr: "Ülke", en: "Country", fi: "Maa", sec: Object.keys(ULKELER), kaynak: "Finlandiya ve diğerleri resmi kaynaklarla eklenecek / Finland and others to be added from official sources" },
+    { k: "grid", tur: "girdi", tr: "Şebeke elektriği ayak izi", en: "Grid electricity footprint", fi: "Verkkosähkön jalanjälki", u: "kg CO₂e/kWh", st: 0.001, onay: 1, kaynak: "Lewandowska 2025, Tablo 15" },
+    { k: "mine_ch4", tur: "girdi", tr: "Maden metanı", en: "Coal mine methane", fi: "Kaivosmetaani", u: "kg CH₄/t", st: 0.01, kaynak: "NID 2026, Tablo 3.3.1–3.3.2" },
+    { k: "mining_co2", tur: "girdi", tr: "Madencilik CO₂ (metan dışı)", en: "Mining CO₂ (non-methane)", fi: "Kaivostoiminnan CO₂ (ei metaani)", u: "g CO₂e/MJ", st: 0.01, onay: 1, kaynak: "GUS 2025 + Lewandowska 2025" },
+    { k: "train_ef", tur: "girdi", tr: "Tren emisyon faktörü", en: "Rail emission factor", fi: "Rautatien päästökerroin", u: "g CO₂e/t·km", st: 0.1, kaynak: "PKP Cargo 2022, s.49" },
+    { k: "LHV_coal", tur: "girdi", tr: "Kömür ısıl değeri", en: "Coal heating value", fi: "Hiilen lämpöarvo", u: "MJ/kg", st: 0.01, kaynak: "KOBiZE 2026, Tablo 1" },
+    { k: "EF_coal", tur: "girdi", tr: "Kömür yanma CO₂ faktörü", en: "Coal combustion CO₂ factor", fi: "Hiilen palamisen CO₂-kerroin", u: "kg CO₂/GJ", st: 0.01, kaynak: "KOBiZE 2026, Tablo 1" },
+    { k: "eurpln", tur: "girdi", tr: "Döviz kuru", en: "Exchange rate", fi: "Valuuttakurssi", u: "PLN/€", st: 0.001, kaynak: "NBP Tablo A, 28.10.2026" },
+    { k: "p_coal", tur: "girdi", tr: "Kömür fiyatı", en: "Coal price", fi: "Hiilen hinta", u: "PLN/GJ", st: 0.01, kaynak: "ARP/TGE PSCMI1" },
+    { k: "p_bio", tur: "girdi", tr: "Yonga fiyatı", en: "Wood chip price", fi: "Hakkeen hinta", u: "PLN/GJ", st: 0.01, kaynak: "URE 2025, Tablo 4" },
+    { k: "p_el", tur: "girdi", tr: "Elektrik fiyatı", en: "Electricity price", fi: "Sähkön hinta", u: "PLN/MWh", st: 0.1, kaynak: "TGE 2025" },
   ]},
-  { tr: "B. Kazanın içi", en: "B. Inside the boiler", p: [
-    { k: "T_yatak", tur: "kaydirici", tr: "Yatak sıcaklığı", en: "Bed temperature", u: "°C", min: 800, max: 950, st: 5, onay: 1, kaynak: "Łagisza vekili, Myöhänen 2009 Şekil 7" },
+  { tr: "B. Kazanın içi", en: "B. Inside the boiler", fi: "B. Kattilan sisällä", p: [
+    { k: "T_yatak", tur: "kaydirici", tr: "Yatak sıcaklığı", en: "Bed temperature", fi: "Petilämpötila", u: "°C", min: 800, max: 950, st: 5, onay: 1, kaynak: "Łagisza vekili, Myöhänen 2009 Şekil 7" },
     { k: "n2o_mod", tur: "secenek", tr: "__n2omod", sec: ["sicaklik", "elle"], kaynak: "Kural: vakaya en yakın ölçüm" },
-    { k: "_n2o_used", tur: "turetilmis", tr: "Kömür N₂O faktörü (kullanılan)", en: "Coal N₂O factor (used)", u: "kg/TJ", onay: 1, kaynak: ">900 °C 30 · 860–900 45 · <860 61 (Tsupari 2007; IPCC 2006)" },
-    { k: "n2o_coal_elle", tur: "girdi", tr: "Kömür N₂O, elle", en: "Coal N₂O, manual", u: "kg/TJ", st: 1, kaynak: "Yalnız 'elle' seçiliyse / only if manual" },
-    { k: "n2o_bio", tur: "girdi", tr: "Odun N₂O", en: "Wood N₂O", u: "kg/TJ", st: 0.5, kaynak: "Tsupari 2007, Tablo 6" },
-    { k: "ch4_coal", tur: "girdi", tr: "Kömür CH₄ (kazanda)", en: "Coal CH₄ (in boiler)", u: "kg/TJ", st: 0.1, kaynak: "Tsupari 2007, Tablo 3 ve 6" },
-    { k: "ch4_bio", tur: "girdi", tr: "Odun CH₄ (kazanda)", en: "Wood CH₄ (in boiler)", u: "kg/TJ", st: 0.1, kaynak: "Tsupari 2007, Tablo 6" },
-    { k: "c_ash", tur: "girdi", tr: "Külde yanmamış karbon", en: "Unburnt carbon in ash", u: "kg C/kg", st: 0.005, kaynak: "Qi 2017; Mei 2014" },
-    { k: "O2ref", tur: "sabit", tr: "Referans O₂", en: "Reference O₂", u: "%", kaynak: "2010/75/AB Ek V" },
+    { k: "_n2o_used", tur: "turetilmis", tr: "Kömür N₂O faktörü (kullanılan)", en: "Coal N₂O factor (used)", fi: "Hiilen N₂O-kerroin (käytetty)", u: "kg/TJ", onay: 1, kaynak: ">900 °C 30 · 860–900 45 · <860 61 (Tsupari 2007; IPCC 2006)" },
+    { k: "n2o_coal_elle", tur: "girdi", tr: "Kömür N₂O, elle", en: "Coal N₂O, manual", fi: "Hiilen N₂O, käsin", u: "kg/TJ", st: 1, kaynak: "Yalnız 'elle' seçiliyse / only if manual" },
+    { k: "n2o_bio", tur: "girdi", tr: "Odun N₂O", en: "Wood N₂O", fi: "Puun N₂O", u: "kg/TJ", st: 0.5, kaynak: "Tsupari 2007, Tablo 6" },
+    { k: "ch4_coal", tur: "girdi", tr: "Kömür CH₄ (kazanda)", en: "Coal CH₄ (in boiler)", fi: "Hiilen CH₄ (kattilassa)", u: "kg/TJ", st: 0.1, kaynak: "Tsupari 2007, Tablo 3 ve 6" },
+    { k: "ch4_bio", tur: "girdi", tr: "Odun CH₄ (kazanda)", en: "Wood CH₄ (in boiler)", fi: "Puun CH₄ (kattilassa)", u: "kg/TJ", st: 0.1, kaynak: "Tsupari 2007, Tablo 6" },
+    { k: "c_ash", tur: "girdi", tr: "Külde yanmamış karbon", en: "Unburnt carbon in ash", fi: "Palamaton hiili tuhkassa", u: "kg C/kg", st: 0.005, kaynak: "Qi 2017; Mei 2014" },
+    { k: "O2ref", tur: "sabit", tr: "Referans O₂", en: "Reference O₂", fi: "Vertailu-O₂", u: "%", kaynak: "2010/75/AB Ek V" },
   ]},
-  { tr: "C. Yakıtlar", en: "C. Fuels", p: [
-    { k: "M_bio", tur: "kaydirici", tr: "Yonga nemi", en: "Chip moisture", u: "%", min: 25, max: 60, st: 1, kaynak: "Wihersaari 2005a, Tablo 1" },
-    { k: "LHV_bio_d", tur: "girdi", tr: "Yonga ısıl değeri (kuru)", en: "Chip heating value (dry)", u: "MJ/kg", st: 0.1, kaynak: "VTT T272, Tablo 4.15" },
-    { k: "_LHV_ar", tur: "turetilmis", tr: "Yonga ısıl değeri (nemli)", en: "Chip heating value (as received)", u: "MJ/kg", kaynak: "EN ISO 18125" },
-    { k: "bio_d.S", tur: "girdi", tr: "Yonga kükürdü (kuru)", en: "Chip sulphur (dry)", u: "%", st: 0.01, kaynak: "Vassilev 2010, Tablo 5" },
-    { k: "coal.S", tur: "girdi", tr: "Kömür kükürdü", en: "Coal sulphur", u: "%", st: 0.05, kaynak: "Burmistrz & Kogut 2016" },
+  { tr: "C. Yakıtlar", en: "C. Fuels", fi: "C. Polttoaineet", p: [
+    { k: "M_bio", tur: "kaydirici", tr: "Yonga nemi", en: "Chip moisture", fi: "Hakkeen kosteus", u: "%", min: 25, max: 60, st: 1, kaynak: "Wihersaari 2005a, Tablo 1" },
+    { k: "LHV_bio_d", tur: "girdi", tr: "Yonga ısıl değeri (kuru)", en: "Chip heating value (dry)", fi: "Hakkeen lämpöarvo (kuiva)", u: "MJ/kg", st: 0.1, kaynak: "VTT T272, Tablo 4.15" },
+    { k: "_LHV_ar", tur: "turetilmis", tr: "Yonga ısıl değeri (nemli)", en: "Chip heating value (as received)", fi: "Hakkeen lämpöarvo (saapumistilassa)", u: "MJ/kg", kaynak: "EN ISO 18125" },
+    { k: "bio_d.S", tur: "girdi", tr: "Yonga kükürdü (kuru)", en: "Chip sulphur (dry)", fi: "Hakkeen rikki (kuiva)", u: "%", st: 0.01, kaynak: "Vassilev 2010, Tablo 5" },
+    { k: "coal.S", tur: "girdi", tr: "Kömür kükürdü", en: "Coal sulphur", fi: "Hiilen rikki", u: "%", st: 0.05, kaynak: "Burmistrz & Kogut 2016" },
   ]},
-  { tr: "D. Kükürt tutma (yalnız kömürlü kazan)", en: "D. Sulphur capture (coal boiler only)", p: [
-    { k: "CaS", tur: "girdi", tr: "Ca/S mol oranı", en: "Ca/S molar ratio", u: "mol/mol", st: 0.1, kaynak: "LCP BREF 2017; Basu 2015 s.140" },
-    { k: "capture", tur: "girdi", tr: "Kükürt tutma oranı", en: "Sulphur capture", u: "—", st: 0.01, kaynak: "Xu 2024, Tablo 1" },
-    { k: "purity", tur: "girdi", tr: "Kireçtaşı saflığı (CaCO₃)", en: "Limestone purity (CaCO₃)", u: "kg/kg", st: 0.001, onay: 1, kaynak: "Xu 2024, s.20057" },
+  { tr: "D. Kükürt tutma (yalnız kömürlü kazan)", en: "D. Sulphur capture (coal boiler only)", fi: "D. Rikinpoisto (vain hiilikattila)", p: [
+    { k: "CaS", tur: "girdi", tr: "Ca/S mol oranı", en: "Ca/S molar ratio", fi: "Ca/S-moolisuhde", u: "mol/mol", st: 0.1, kaynak: "LCP BREF 2017; Basu 2015 s.140" },
+    { k: "capture", tur: "girdi", tr: "Kükürt tutma oranı", en: "Sulphur capture", fi: "Rikinpoistoaste", u: "—", st: 0.01, kaynak: "Xu 2024, Tablo 1" },
+    { k: "purity", tur: "girdi", tr: "Kireçtaşı saflığı (CaCO₃)", en: "Limestone purity (CaCO₃)", fi: "Kalkkikiven puhtaus (CaCO₃)", u: "kg/kg", st: 0.001, onay: 1, kaynak: "Xu 2024, s.20057" },
   ]},
-  { tr: "E. Kömür tedarik zinciri", en: "E. Coal supply chain", p: [
-    { k: "train_km", tur: "kaydirici", tr: "Tren mesafesi", en: "Rail distance", u: "km", min: 0, max: 500, st: 10, kaynak: "Varsayım, kullanıcı değiştirir / assumption" },
+  { tr: "E. Kömür tedarik zinciri", en: "E. Coal supply chain", fi: "E. Hiilen hankintaketju", p: [
+    { k: "train_km", tur: "kaydirici", tr: "Tren mesafesi", en: "Rail distance", fi: "Rautatiematka", u: "km", min: 0, max: 500, st: 10, kaynak: "Varsayım, kullanıcı değiştirir / assumption" },
   ]},
-  { tr: "F. Yonga tedarik zinciri", en: "F. Wood chip supply chain", p: [
-    { k: "harvest", tur: "girdi", tr: "Hasat ve yongalama", en: "Harvest and chipping", u: "g CO₂e/MJ", st: 0.1, kaynak: "JRC 2017, Tablo 91" },
-    { k: "truck_km", tur: "kaydirici", tr: "Kamyon mesafesi", en: "Truck distance", u: "km", min: 0, max: 600, st: 10, kaynak: "Gendek & Nurek 2016" },
-    { k: "_truck", tur: "turetilmis", tr: "Kamyon faktörü (dizelden)", en: "Truck factor (from diesel)", u: "g CO₂e/MJ yonga", onay: 1, kaynak: "Kühmaier 2022; Stolarski 2023; JRC 2017" },
-    { k: "dm_rate", tur: "girdi", tr: "Kuru madde kaybı", en: "Dry-matter loss", u: "%/ay", st: 0.1, kaynak: "Wihersaari 2005b, s.446" },
-    { k: "dm_months", tur: "kaydirici", tr: "Depoda bekleme", en: "Storage time", u: "ay", min: 0, max: 12, st: 0.5, onay: 1, kaynak: "Varsayım / assumption" },
+  { tr: "F. Yonga tedarik zinciri", en: "F. Wood chip supply chain", fi: "F. Hakkeen hankintaketju", p: [
+    { k: "harvest", tur: "girdi", tr: "Hasat ve yongalama", en: "Harvest and chipping", fi: "Korjuu ja haketus", u: "g CO₂e/MJ", st: 0.1, kaynak: "JRC 2017, Tablo 91" },
+    { k: "truck_km", tur: "kaydirici", tr: "Kamyon mesafesi", en: "Truck distance", fi: "Kuljetusmatka autolla", u: "km", min: 0, max: 600, st: 10, kaynak: "Gendek & Nurek 2016" },
+    { k: "_truck", tur: "turetilmis", tr: "Kamyon faktörü (dizelden)", en: "Truck factor (from diesel)", fi: "Kuljetuksen kerroin (dieselistä)", u: "g CO₂e/MJ yonga", onay: 1, kaynak: "Kühmaier 2022; Stolarski 2023; JRC 2017" },
+    { k: "dm_rate", tur: "girdi", tr: "Kuru madde kaybı", en: "Dry-matter loss", fi: "Kuiva-ainehävikki", u: "%/ay", st: 0.1, kaynak: "Wihersaari 2005b, s.446" },
+    { k: "dm_months", tur: "kaydirici", tr: "Depoda bekleme", en: "Storage time", fi: "Varastointiaika", u: "ay", min: 0, max: 12, st: 0.5, onay: 1, kaynak: "Varsayım / assumption" },
   ]},
-  { tr: "G. Elektrik ve sarf malzemeleri", en: "G. Power and consumables", p: [
-    { k: "aux_coal", tur: "girdi", tr: "Yardımcı elektrik, kömür", en: "Auxiliary power, coal", u: "kWh/MWh yakıt", st: 0.5, kaynak: "Lockwood 2013, Tablo 5" },
-    { k: "aux_bio", tur: "girdi", tr: "Yardımcı elektrik, biyokütle", en: "Auxiliary power, biomass", u: "kWh/MWh yakıt", st: 0.5, kaynak: "Mühendislik tahmini (kaynaksız) / engineering estimate" },
-    { k: "nh3w", tur: "girdi", tr: "Amonyak suyu (%25)", en: "Ammonia water (25%)", u: "kg/MWh yakıt", st: 0.01, kaynak: "Mahmoudi 2010, s.1406" },
-    { k: "sand", tur: "girdi", tr: "Yatak kumu (biyokütle payı)", en: "Bed sand (biomass share)", u: "kg/MWh yakıt", st: 0.5, kaynak: "Leckner & Lind 2020 §6" },
-    { k: "lime_prod", tur: "girdi", tr: "Kum ve kireçtaşı üretimi", en: "Sand and limestone production", u: "kg CO₂e/t", st: 0.5, kaynak: "Kırma taş EPD'leri" },
+  { tr: "G. Elektrik ve sarf malzemeleri", en: "G. Power and consumables", fi: "G. Sähkö ja tarvikkeet", p: [
+    { k: "aux_coal", tur: "girdi", tr: "Yardımcı elektrik, kömür", en: "Auxiliary power, coal", fi: "Omakäyttösähkö, hiili", u: "kWh/MWh yakıt", st: 0.5, kaynak: "Lockwood 2013, Tablo 5" },
+    { k: "aux_bio", tur: "girdi", tr: "Yardımcı elektrik, biyokütle", en: "Auxiliary power, biomass", fi: "Omakäyttösähkö, biomassa", u: "kWh/MWh yakıt", st: 0.5, kaynak: "Mühendislik tahmini (kaynaksız) / engineering estimate" },
+    { k: "nh3w", tur: "girdi", tr: "Amonyak suyu (%25)", en: "Ammonia water (25%)", fi: "Ammoniakkivesi (25 %)", u: "kg/MWh yakıt", st: 0.01, kaynak: "Mahmoudi 2010, s.1406" },
+    { k: "sand", tur: "girdi", tr: "Yatak kumu (biyokütle payı)", en: "Bed sand (biomass share)", fi: "Petihiekka (biomassaosuus)", u: "kg/MWh yakıt", st: 0.5, kaynak: "Leckner & Lind 2020 §6" },
+    { k: "lime_prod", tur: "girdi", tr: "Kum ve kireçtaşı üretimi", en: "Sand and limestone production", fi: "Hiekan ja kalkkikiven tuotanto", u: "kg CO₂e/t", st: 0.5, kaynak: "Kırma taş EPD'leri" },
     { k: "malz_tasima", tur: "secenek", tr: "__malztasima", sec: [false, true], kaynak: "Varsayılan kapalı, belgeyle aynı sayılar / off by default" },
-    { k: "malz_arac", tur: "secenek", tr: "Taşıma aracı", en: "Vehicle", sec: ["kamyon", "tren"], kaynak: "DESNZ 2026 (kamyon 96,3) · PKP Cargo 2022 (tren 18,5) g/t·km" },
-    { k: "malz_km", tur: "kaydirici", tr: "Taş ocağı mesafesi", en: "Quarry distance", u: "km", min: 0, max: 500, st: 10, kaynak: "Varsayım / assumption" },
+    { k: "malz_arac", tur: "secenek", tr: "Taşıma aracı", en: "Vehicle", fi: "Kulkuneuvo", sec: ["kamyon", "tren"], kaynak: "DESNZ 2026 (kamyon 96,3) · PKP Cargo 2022 (tren 18,5) g/t·km" },
+    { k: "malz_km", tur: "kaydirici", tr: "Taş ocağı mesafesi", en: "Quarry distance", fi: "Matka louhokselta", u: "km", min: 0, max: 500, st: 10, kaynak: "Varsayım / assumption" },
   ]},
-  { tr: "H. Ekonomi", en: "H. Economics", p: [
-    { k: "ets", tur: "kaydirici", tr: "ETS fiyatı", en: "ETS price", u: "€/t CO₂", min: 0, max: 200, st: 1, kaynak: "KOBiZE rapor nr 174" },
+  { tr: "H. Ekonomi", en: "H. Economics", fi: "H. Talous", p: [
+    { k: "ets", tur: "kaydirici", tr: "ETS fiyatı", en: "ETS price", fi: "ETS-hinta", u: "€/t CO₂", min: 0, max: 200, st: 1, kaynak: "KOBiZE rapor nr 174" },
     { k: "bio_sertifikali", tur: "secenek", tr: "__sertifika", sec: [true, false], kaynak: "RED III, %80 tasarruf şartı" },
-    { k: "p_lime", tur: "girdi", tr: "Kireçtaşı sorbenti fiyatı (teslim)", en: "Limestone sorbent price (delivered)", u: "€/t", st: 1, kaynak: "TED 551112-2023 (Termika Żerań), 793352-2024, 796961-2025 · aralık 18–66" },
-    { k: "p_nh3w", tur: "girdi", tr: "Amonyak suyu %25 fiyatı", en: "Ammonia water 25% price", u: "€/t", st: 5, kaynak: "TED 71297-2026 (PGE EC) · aralık 125–560" },
-    { k: "p_sand", tur: "girdi", tr: "Yatak kumu fiyatı", en: "Bed sand price", u: "€/t", st: 1, kaynak: "Rydén 2018, Appl. Sci. 8:2657 s.19 · aralık 15–135" },
-    { k: "p_oil", tur: "girdi", tr: "Isıtma yağı fiyatı (vergisiz)", en: "Heating oil price (excl. taxes)", u: "€/t", st: 10, kaynak: "AB Weekly Oil Bulletin, Polonya, 2023–2025 ort." },
+    { k: "p_lime", tur: "girdi", tr: "Kireçtaşı sorbenti fiyatı (teslim)", en: "Limestone sorbent price (delivered)", fi: "Kalkkikivisorbentin hinta (toimitettuna)", u: "€/t", st: 1, kaynak: "TED 551112-2023 (Termika Żerań), 793352-2024, 796961-2025 · aralık 18–66" },
+    { k: "p_nh3w", tur: "girdi", tr: "Amonyak suyu %25 fiyatı", en: "Ammonia water 25% price", fi: "Ammoniakkiveden (25 %) hinta", u: "€/t", st: 5, kaynak: "TED 71297-2026 (PGE EC) · aralık 125–560" },
+    { k: "p_sand", tur: "girdi", tr: "Yatak kumu fiyatı", en: "Bed sand price", fi: "Petihiekan hinta", u: "€/t", st: 1, kaynak: "Rydén 2018, Appl. Sci. 8:2657 s.19 · aralık 15–135" },
+    { k: "p_oil", tur: "girdi", tr: "Isıtma yağı fiyatı (vergisiz)", en: "Heating oil price (excl. taxes)", fi: "Lämmitysöljyn hinta (veroton)", u: "€/t", st: 10, kaynak: "AB Weekly Oil Bulletin, Polonya, 2023–2025 ort." },
   ]},
-  { tr: "I. Sabitler", en: "I. Constants", p: [
-    { k: "GWP_N2O", tur: "sabit", tr: "N₂O GWP100", en: "N₂O GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
-    { k: "GWP_CH4_fos", tur: "sabit", tr: "Fosil CH₄ GWP100", en: "Fossil CH₄ GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
-    { k: "GWP_CH4_bio", tur: "sabit", tr: "Biyojenik CH₄ GWP100", en: "Biogenic CH₄ GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
+  { tr: "I. Sabitler", en: "I. Constants", fi: "I. Vakiot", p: [
+    { k: "GWP_N2O", tur: "sabit", tr: "N₂O GWP100", en: "N₂O GWP100", fi: "N₂O:n GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
+    { k: "GWP_CH4_fos", tur: "sabit", tr: "Fosil CH₄ GWP100", en: "Fossil CH₄ GWP100", fi: "Fossiilisen CH₄:n GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
+    { k: "GWP_CH4_bio", tur: "sabit", tr: "Biyojenik CH₄ GWP100", en: "Biogenic CH₄ GWP100", fi: "Biogeenisen CH₄:n GWP100", u: "—", kaynak: "IPCC AR6, Tablo 7.15" },
   ]},
 ];
 
@@ -541,7 +590,8 @@ try {
 } catch (e) {}
 const kaydet = () => { try { localStorage.setItem("donusum-araci", JSON.stringify({ dil, P, KZ, buhar, gorunum })); } catch (e) {} };
 const t = k => T[dil][k];
-const fmt = (v, d = 1) => (v ?? 0).toLocaleString(dil === "tr" ? "tr-TR" : "en-GB", { minimumFractionDigits: d, maximumFractionDigits: d });
+const YEREL = { tr: "tr-TR", en: "en-GB", fi: "fi-FI" };
+const fmt = (v, d = 1) => (v ?? 0).toLocaleString(YEREL[dil], { minimumFractionDigits: d, maximumFractionDigits: d });
 const al = k => k.includes(".") ? P[k.split(".")[0]][k.split(".")[1]] : P[k];
 const ver = (k, v) => { if (k.includes(".")) { const [a, b] = k.split("."); P[a][b] = v; } else P[k] = v; };
 const kAd = k => KALEM[k][dil][0];
@@ -755,7 +805,7 @@ function tornado() {
       const pl = kopya(P), ph = kopya(P); lo(pl); hi(ph);
       rl = hesapla(pl, KZ).kazanlar[odak].toplam; rh = hesapla(ph, KZ).kazanlar[odak].toplam;
     }
-    return { ad: dil === "tr" ? tr : en, a: Math.min(rl, rh), b: Math.max(rl, rh) };
+    return { ad: dil === "tr" ? tr : dil === "fi" ? (TOR_FI[key] || en) : en, a: Math.min(rl, rh), b: Math.max(rl, rh) };
   }).filter(s => s.b - s.a > 0.05).sort((x, y) => (y.b - y.a) - (x.b - x.a)).slice(0, 10);
   const lo = Math.min(...satirlar.map(s => s.a), taban), hi = Math.max(...satirlar.map(s => s.b), taban);
   const pad = (hi - lo) * 0.08 || 1;
@@ -898,7 +948,7 @@ function raporOlustur() {
   const R = hesapla(P, KZ), S = R.kazanlar;
   const html = id => document.getElementById(id).innerHTML;
   const kart = (baslik, govde) => `<div class="card blok"><h3>${baslik}</h3>${govde}</div>`;
-  const tarih = new Date().toLocaleDateString(dil === "tr" ? "tr-TR" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
+  const tarih = new Date().toLocaleDateString(YEREL[dil], { day: "numeric", month: "long", year: "numeric" });
   const kazanTablo = `<div class="wrap blok"><table><tr><th>${t("ad")}</th><th class="n">${t("komur")}</th><th class="n">${t("verim")}</th><th class="n">${t("kap")}, MW</th><th class="n">${t("saat")}</th><th>${t("kirec")}</th></tr>
     ${KZ.map(k => `<tr><td>${esc(k.ad)}</td><td class="n">%${k.share_coal}</td><td class="n">${fmt(k.eta, 3)}</td><td class="n">${fmt(k.kap, 1)}</td><td class="n">${fmt(k.saat, 0)}</td><td>${k.kirectasi ? t("evet") : t("hayir")}</td></tr>`).join("")}</table></div>`;
   const varsayim = GRUPLAR.map(g => {
@@ -948,16 +998,16 @@ function raporOlustur() {
 function metinler() {
   document.documentElement.lang = dil;
   document.querySelectorAll("[data-i]").forEach(e => { e.textContent = t(e.dataset.i); });
-  document.getElementById("dil").textContent = dil === "tr" ? "EN" : "TR";
+  document.getElementById("dil").textContent = { tr: "EN", en: "FI", fi: "TR" }[dil];
   document.getElementById("eksik").innerHTML = `<ul>${t("eksik").map(x => `<li>${x}</li>`).join("")}</ul>`;
 }
 function hepsi() { metinler(); kazanKartlari(); odakListesi(); parametreler(); document.getElementById("detay").innerHTML = ""; document.getElementById("detay2").innerHTML = ""; secili = null; guncelle(); }
 
-document.getElementById("dil").addEventListener("click", () => { dil = dil === "tr" ? "en" : "tr"; hepsi(); });
+document.getElementById("dil").addEventListener("click", () => { dil = { tr: "en", en: "fi", fi: "tr" }[dil]; hepsi(); });
 document.getElementById("pdf").addEventListener("click", () => {
   raporOlustur();
   const eski = document.title;
-  document.title = (dil === "tr" ? "Donusum_raporu_" : "Conversion_report_") + "Emine_Edis_" + new Date().toISOString().slice(0, 10);
+  document.title = ({ tr: "Donusum_raporu_", en: "Conversion_report_", fi: "Muunnosraportti_" }[dil]) + "Emine_Edis_" + new Date().toISOString().slice(0, 10);
   window.print();
   document.title = eski;
 });

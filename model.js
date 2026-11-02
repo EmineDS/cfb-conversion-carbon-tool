@@ -18,7 +18,7 @@
   // Ülkeye özel değerler burada; teknolojiye özel değerler aşağıdaki VARSAYILAN içinde.
   const ULKELER = {
     PL: {
-      ad: { tr: "Polonya", en: "Poland" },
+      ad: { tr: "Polonya", en: "Poland", fi: "Puola" },
       mine_ch4: 9.77,          // kg CH4 / t kömür, NID 2026 Tablo 3.3.1 ve 3.3.2 (8,09 + 1,675)
       mining_co2: 56.6 / 21.43, // g CO2e/MJ, GUS 2025 Tabl. 3(29) + Lewandowska 2025 şebeke 0,641
       train_ef: 18.5,          // g CO2e / t·km, PKP Cargo Raport zintegrowany 2022 s.49
