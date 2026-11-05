@@ -485,6 +485,48 @@ GRUP_KARBON.forEach(([, ks, c]) => ks.forEach(k => { RENK_KALEM[k] = c; }));
 const KAZAN_RENK = ["--s1", "--s2", "--s3", "--s4", "--s5", "--s6", "--s7", "--s8"];
 
 // ---------------------------------------------------------------- duyarlılık aralıkları (hesap.py TOR listesi)
+
+// Kaynak ve birim metinlerini seçili dile çevirir (TR'de olduğu gibi kalır).
+const YER_TAM = {
+  "Finlandiya ve diğerleri resmi kaynaklarla eklenecek / Finland and others to be added from official sources": ["Finland and others to be added from official sources", "Suomi ja muut lisätään virallisista lähteistä"],
+  "Kural: vakaya en yakın ölçüm": ["Rule: the measurement closest to the case", "Sääntö: tapausta lähimpänä oleva mittaus"],
+  "Yalnız 'elle' seçiliyse / only if manual": ["Only if 'manual' is selected", "Vain jos 'manuaalinen' on valittu"],
+  "Varsayım / assumption": ["Assumption", "Oletus"],
+  "Varsayım, kullanıcı değiştirir / assumption": ["Assumption, adjustable by the user", "Oletus, käyttäjä voi muuttaa"],
+  "Mühendislik tahmini (kaynaksız) / engineering estimate": ["Engineering estimate (no source)", "Insinööriarvio (ei lähdettä)"],
+  "Kırma taş EPD'leri": ["Crushed stone EPDs", "Murskekiven EPD:t"],
+  "Kırma taş EPD'leri; Leckner & Lind 2020": ["Crushed stone EPDs; Leckner & Lind 2020", "Murskekiven EPD:t; Leckner & Lind 2020"],
+  "Varsayılan kapalı, belgeyle aynı sayılar / off by default": ["Off by default, same numbers as the document", "Oletuksena pois päältä, samat luvut kuin asiakirjassa"],
+  "RED III, %80 tasarruf şartı": ["RED III, 80% saving requirement", "RED III, 80 %:n säästövaatimus"],
+  "Łagisza vekili, Myöhänen 2009 Şekil 7": ["Łagisza as proxy, Myöhänen 2009 Fig. 7", "Łagisza vertailukohtana, Myöhänen 2009 kuva 7"],
+  "AB Weekly Oil Bulletin, Polonya, 2023–2025 ort.": ["EU Weekly Oil Bulletin, Poland, 2023–2025 average", "EU Weekly Oil Bulletin, Puola, 2023–2025 keskiarvo"],
+  "DESNZ 2026 (kamyon 96,3) · PKP Cargo 2022 (tren 18,5) g/t·km": ["DESNZ 2026 (truck 96.3) · PKP Cargo 2022 (train 18.5) g/t·km", "DESNZ 2026 (kuorma-auto 96,3) · PKP Cargo 2022 (juna 18,5) g/t·km"],
+  "2010/75/AB Ek V": ["2010/75/EU Annex V", "2010/75/EU liite V"],
+  "Laanila, Johannes, Kauttua raporları; DESNZ 2026": ["Laanila, Johannes and Kauttua reports; DESNZ 2026", "Laanilan, Johanneksen ja Kauttuan raportit; DESNZ 2026"],
+  "Mahmoudi 2010; JRC amonyak notu 2026": ["Mahmoudi 2010; JRC ammonia note 2026", "Mahmoudi 2010; JRC:n ammoniakkimuistio 2026"],
+  "ay": ["months", "kk"],
+  "%/ay": ["%/month", "%/kk"],
+  "g CO₂e/MJ yonga": ["g CO₂e/MJ chips", "g CO₂e/MJ haketta"],
+  "kWh/MWh yakıt": ["kWh/MWh fuel", "kWh/MWh polttoainetta"],
+  "kg/MWh yakıt": ["kg/MWh fuel", "kg/MWh polttoainetta"],
+};
+const YER_PARCA = [
+  [/Tabl(o|\.)\s/g, ["Table ", "taulukko "]],
+  [/Şekil\s/g, ["Fig. ", "kuva "]],
+  [/Cilt\s/g, ["Vol. ", "osa "]],
+  [/\bEk\s/g, ["Annex ", "liite "]],
+  [/\bve\b/g, ["and", "ja"]],
+  [/aralık/g, ["range", "vaihteluväli"]],
+  [/\bs\.(?=\d)/g, ["p.", "s."]],
+];
+function yer(m) {
+  if (m == null || dil === "tr") return m;
+  const i = dil === "fi" ? 1 : 0;
+  if (YER_TAM[m]) return YER_TAM[m][i];
+  let r = m;
+  for (const [re, ceviri] of YER_PARCA) r = r.replace(re, ceviri[i]);
+  return r;
+}
 const TOR_FI = {"n2o":"Hiilen N₂O-kerroin","eta":"Kattilan hyötysuhde","mine_ch4":"Kaivosmetaani","mining_co2":"Kaivostoiminnan CO₂","train_km":"Rautatiematka","grid":"Verkkosähkö","aux_coal":"Omakäyttösähkö, hiili","aux_bio":"Omakäyttösähkö, biomassa","truck_km":"Kuljetusmatka autolla","harvest":"Korjuu ja haketus","dm_rate":"Kuiva-ainehävikin nopeus","dm_months":"Varastointiaika","n2o_bio":"Puun N₂O-kerroin","ch4_bio":"Puun CH₄-kerroin","CaS":"Ca/S-suhde","coalS":"Hiilen rikki","nh3w":"Ammoniakkivesi","sand":"Petihiekka","M_bio":"Hakkeen kosteus"};
 const TOR = [
   ["n2o", "Kömür N₂O faktörü", "Coal N₂O factor", p => { p.n2o_mod = "elle"; p.n2o_coal_elle = 30; }, p => { p.n2o_mod = "elle"; p.n2o_coal_elle = 61; }],
@@ -670,8 +712,8 @@ function parametreler() {
       } else {
         kontrol = `<input type="number" step="${p.st}" value="${+(+al(p.k)).toFixed(4)}" data-k="${p.k}" aria-label="${ad}">`;
       }
-      return `<tr><td>${ad} ${p.onay ? `<span class="onay">${t("onay")}</span>` : ""}</td><td>${kontrol}</td><td>${p.u || ""}</td>
-        <td><span class="t t-${p.tur}">${t("turler")[p.tur]}</span></td><td class="src">${p.kaynak}</td></tr>`;
+      return `<tr><td>${ad} ${p.onay ? `<span class="onay">${t("onay")}</span>` : ""}</td><td>${kontrol}</td><td>${yer(p.u) || ""}</td>
+        <td><span class="t t-${p.tur}">${t("turler")[p.tur]}</span></td><td class="src">${yer(p.kaynak)}</td></tr>`;
     }).join("");
     det.innerHTML = `<summary>${g[dil]}</summary><div class="wrap"><table class="ptable">
       <tr><th>${t("kalem")}</th><th>${t("deger")}</th><th>${t("birimk")}</th><th>${t("tur")}</th><th>${t("kaynak")}</th></tr>${satirlar}</table></div>`;
@@ -733,7 +775,7 @@ function detayHtml(K, baslik, ks, renk) {
       <div class="d"><b>${t("nerede")}:</b> ${x[1]}</div>
       <div class="d"><b>${t("neden")}:</b> ${x[2]}</div>
       <div class="d"><b>${t("formul")}:</b> ${x[3]}</div>
-      <div class="d"><b>${t("kaynak")}:</b> ${m.src}</div></div>`;
+      <div class="d"><b>${t("kaynak")}:</b> ${yer(m.src)}</div></div>`;
   }).join("");
   const bos = ks.every(k => K.em[k] <= 1e-9);
   return `<div class="panel" style="--c:var(${renk})">
@@ -965,7 +1007,7 @@ function raporOlustur() {
       const vs = p.k.startsWith("_") || typeof al(p.k) !== "number" ? null : (p.k.includes(".") ? VARSAYILAN[p.k.split(".")[0]][p.k.split(".")[1]] : VARSAYILAN[p.k]);
       const degisti = vs !== null && vs !== undefined && Math.abs(+al(p.k) - vs) > 1e-9;
       return `<tr><td>${ad}${p.onay ? ` <span class="onay">${t("onay")}</span>` : ""}${degisti ? ` <span class="onay" style="background:var(--warn-soft);color:var(--warn)">${t("r_degisen")}</span>` : ""}</td>
-        <td class="n">${v}</td><td>${p.u || ""}</td><td><span class="t t-${p.tur}">${t("turler")[p.tur]}</span></td><td style="color:var(--muted)">${p.kaynak}</td></tr>`;
+        <td class="n">${v}</td><td>${yer(p.u) || ""}</td><td><span class="t t-${p.tur}">${t("turler")[p.tur]}</span></td><td style="color:var(--muted)">${yer(p.kaynak)}</td></tr>`;
     }).join("");
     return `<tr><th colspan="5">${g[dil]}</th></tr>${satir}`;
   }).join("");
@@ -1003,7 +1045,15 @@ function metinler() {
 }
 function hepsi() { metinler(); kazanKartlari(); odakListesi(); parametreler(); document.getElementById("detay").innerHTML = ""; document.getElementById("detay2").innerHTML = ""; secili = null; guncelle(); }
 
-document.querySelectorAll("#dil button").forEach(b => b.addEventListener("click", () => { dil = b.dataset.dil; hepsi(); }));
+// Varsayılan kazan adları seçili dile göre değişir; kullanıcının verdiği adlara dokunulmaz.
+const VARS_ADLAR = [
+  { tr: "Kazan 1 · %70 kömür", en: "Boiler 1 · 70% coal", fi: "Kattila 1 · 70 % hiiltä" },
+  { tr: "Kazan 2 · %100 yonga", en: "Boiler 2 · 100% chips", fi: "Kattila 2 · 100 % haketta" },
+];
+function adYerel() {
+  KZ.forEach(k => { const d = VARS_ADLAR.find(x => Object.values(x).includes(k.ad)); if (d) k.ad = d[dil]; });
+}
+document.querySelectorAll("#dil button").forEach(b => b.addEventListener("click", () => { dil = b.dataset.dil; adYerel(); hepsi(); }));
 document.getElementById("pdf").addEventListener("click", () => {
   raporOlustur();
   const eski = document.title;
@@ -1011,7 +1061,7 @@ document.getElementById("pdf").addEventListener("click", () => {
   window.print();
   document.title = eski;
 });
-document.getElementById("sifirla").addEventListener("click", () => { P = kopya(VARSAYILAN); KZ = kopya(KAZANLAR); odak = 1; buhar = 795; hepsi(); });
+document.getElementById("sifirla").addEventListener("click", () => { P = kopya(VARSAYILAN); KZ = kopya(KAZANLAR); adYerel(); odak = 1; buhar = 795; hepsi(); });
 document.getElementById("ekle").addEventListener("click", () => {
   const son = KZ[KZ.length - 1] || KAZANLAR[0];
   KZ.push(Object.assign(kopya(son), { ad: `${t("yeni")} ${KZ.length + 1}` }));
@@ -1020,6 +1070,7 @@ document.getElementById("ekle").addEventListener("click", () => {
 document.getElementById("odak").addEventListener("change", e => { odak = +e.target.value; guncelle(); });
 document.getElementById("buhar").addEventListener("input", e => { buhar = +e.target.value; guncelle(); });
 document.querySelectorAll("#gorunum button").forEach(b => b.addEventListener("click", () => { gorunum = b.dataset.v; secili = null; document.getElementById("detay").innerHTML = ""; guncelle(); }));
+adYerel();
 hepsi();
 if (location.hash === "#rapor") raporOlustur(); // doğrudan yazdırma ya da otomatik PDF üretimi için
 </script>
